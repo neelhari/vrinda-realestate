@@ -115,7 +115,7 @@ export default function BrandTrust({ story }: BrandTrustProps) {
                 <p className="text-xs text-slate-500">Founder & Managing Director, Vrinda Real Estate</p>
                 <p className="text-xs text-slate-400 mt-0.5 flex items-center gap-1">
                   <MapPin className="w-3 h-3 text-[#ea511c]" />
-                  <span>Koppolu / Venugopalaswami St, Ongole</span>
+                  <span>FCI Rd, N. T. R Colony, Koppolu, Ongole</span>
                 </p>
               </div>
 

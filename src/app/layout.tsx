@@ -92,17 +92,26 @@ export default function RootLayout({
     "@type": ["RealEstateAgent", "LocalBusiness"],
     name: "Vrinda Real Estate",
     image: "https://vrindarealestate.com/images/vrinda-logo.png",
-    founder: {
-      "@type": "Person",
-      name: "Bejapur Ayyappa Sai"
-    },
+    founders: [
+      {
+        "@type": "Person",
+        name: "Bejapur Ayyappa Sai",
+        jobTitle: "Founder & Managing Director"
+      },
+      {
+        "@type": "Person",
+        name: "Murari Chiranjeevi",
+        jobTitle: "Co-Founder & Operations Director"
+      }
+    ],
     telephone: "+91-8464882925",
     email: "vrindarealestates0@gmail.com",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Koppolu",
+      streetAddress: "42-106-243, FCI Rd, N. T. R Colony, Koppolu",
       addressLocality: "Ongole",
       addressRegion: "Andhra Pradesh",
+      postalCode: "523286",
       addressCountry: "IN"
     },
     geo: {

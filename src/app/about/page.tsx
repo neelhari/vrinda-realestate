@@ -3,13 +3,13 @@ import { Metadata } from 'next';
 import Image from 'next/image';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { Award, MapPin, Building, Phone } from 'lucide-react';
+import { Award, MapPin, Building, Phone, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { WhatsAppIcon } from '@/components/icons/SocialIcons';
 import { buildWhatsAppUrl, buildPhoneUrl } from '@/lib/utils';
 
 export const metadata: Metadata = {
   title: 'About Us & Founders | Vrinda Real Estate Ongole',
-  description: 'Learn about Vrinda Real Estate, our founders, and our commitment to transparent, verified land and home developments in Ongole, Andhra Pradesh.',
+  description: 'Learn about Vrinda Real Estate, our founders Bejapur Ayyappa Sai & Murari Chiranjeevi, and our commitment to transparent land developments in Ongole.',
 };
 
 export default function AboutPage() {
@@ -43,7 +43,7 @@ export default function AboutPage() {
     <main className="min-h-screen flex flex-col bg-white">
       <Navbar />
 
-      {/* 100% Bright, Pristine Architectural Photo Banner with Left-Aligned Title & Description Inside (Zero color shade) */}
+      {/* 1. Architectural Photo Banner */}
       <section className="relative w-full h-56 sm:h-72 lg:h-80 flex items-end pb-6 sm:pb-8 overflow-hidden bg-slate-900">
         <Image
           src="/images/hero-luxury-villa.jpg"
@@ -93,38 +93,125 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 3. Founders (Title: Founders, Below: Image 1 || Image 2 side-by-side with no nested boxes) */}
-      <section className="py-8 sm:py-12 bg-[#f8fafc] border-b border-slate-200">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
-          <div className="text-center">
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-slate-900">
-              Founders
+      {/* 3. Founders Section: Big Single Pictures with 3 Lines Description Each */}
+      <section className="py-10 sm:py-16 bg-[#f8fafc] border-b border-slate-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-12">
+          <div className="text-center space-y-1">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-[#ea511c] font-semibold">
+              Leadership & Guidance
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900">
+              Meet Our Founders
             </h2>
+            <p className="text-xs sm:text-sm text-slate-500 max-w-lg mx-auto">
+              Direct founder accountability and transparent oversight for every property transaction.
+            </p>
           </div>
 
-          {/* Clean Side-by-Side Images (Image 1 || Image 2, No nested boxes underneath) */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-6 max-w-xl mx-auto">
-            <div className="relative h-44 sm:h-64 rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-slate-100">
-              <Image
-                src="/images/founder-ayyappa-sai.png"
-                alt="Founder Bejapur Ayyappa Sai"
-                fill
-                sizes="280px"
-                className="object-cover object-top"
-                priority
-              />
+          <div className="space-y-8 sm:space-y-10">
+            
+            {/* Founder 1: Bejapur Ayyappa Sai */}
+            <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row items-stretch">
+              {/* Open Edge-to-Edge Single Picture Touching the Card */}
+              <div className="relative w-full md:w-[42%] lg:w-[40%] min-h-[340px] sm:min-h-[400px] md:min-h-[380px] shrink-0 bg-slate-100">
+                <Image
+                  src="/images/founder-ayyappa-sai.png"
+                  alt="Bejapur Ayyappa Sai - Founder & Managing Director"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 400px"
+                  className="object-cover object-top"
+                  priority
+                />
+              </div>
+
+              {/* Founder 1 Info & 3 Lines */}
+              <div className="flex-1 p-6 sm:p-8 lg:p-10 flex flex-col justify-center space-y-4">
+                <div className="space-y-1">
+                  <span className="inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#0a4ba6]/10 text-[#0a4ba6]">
+                    Founder 1
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900">
+                    Bejapur Ayyappa Sai
+                  </h3>
+                  <p className="text-xs sm:text-sm font-semibold text-[#ea511c]">
+                    Founder & Managing Director
+                  </p>
+                </div>
+
+                <div className="space-y-3 pt-3 border-t border-slate-100 text-xs sm:text-sm text-slate-600">
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <p className="leading-relaxed">
+                      Leading strategic land acquisition, master plotted venture development, and market expansions across Ongole.
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <p className="leading-relaxed">
+                      Enforcing 100% legal clearance, 30-year link document verification, and government regulatory compliance.
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <p className="leading-relaxed">
+                      Providing direct client consultations, personalized investment advisory, and transparent Sub-Registrar registrations.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="relative h-44 sm:h-64 rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-slate-100">
-              <Image
-                src="/images/founder-partner.png"
-                alt="Executive Partner"
-                fill
-                sizes="280px"
-                className="object-cover object-top"
-                priority
-              />
+            {/* Founder 2: Murari Chiranjeevi */}
+            <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row items-stretch">
+              {/* Open Edge-to-Edge Single Picture Touching the Card */}
+              <div className="relative w-full md:w-[42%] lg:w-[40%] min-h-[340px] sm:min-h-[400px] md:min-h-[380px] shrink-0 bg-slate-100">
+                <Image
+                  src="/images/founder-murari-chiranjeevi.png"
+                  alt="Murari Chiranjeevi - Founder & Operations Director"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 400px"
+                  className="object-cover object-top"
+                  priority
+                />
+              </div>
+
+              {/* Founder 2 Info & 3 Lines */}
+              <div className="flex-1 p-6 sm:p-8 lg:p-10 flex flex-col justify-center space-y-4">
+                <div className="space-y-1">
+                  <span className="inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-orange-100 text-[#ea511c]">
+                    Founder 2
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900">
+                    Murari Chiranjeevi
+                  </h3>
+                  <p className="text-xs sm:text-sm font-semibold text-[#0a4ba6]">
+                    Founder & Operations Director
+                  </p>
+                </div>
+
+                <div className="space-y-3 pt-3 border-t border-slate-100 text-xs sm:text-sm text-slate-600">
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <p className="leading-relaxed">
+                      Managing on-ground layout development, BT road infrastructure, drainage, and layout quality standards.
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <p className="leading-relaxed">
+                      Guiding personalized on-site property tours, plot boundary inspections, and layout walkthroughs in Koppolu.
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <p className="leading-relaxed">
+                      Coordinating end-to-end documentation handovers, spot registry assistance, and seamless buyer handover.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
       </section>
@@ -172,24 +259,28 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 5. Office Addresses */}
+      {/* 5. Founders Office Address */}
       <section className="py-8 sm:py-12 bg-[#f8fafc]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-            <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-1 shadow-2xs">
-              <div className="flex items-center gap-1.5 text-[#0a4ba6] font-bold text-xs">
-                <MapPin className="w-3.5 h-3.5 text-[#ea511c]" />
-                <span>Primary Office</span>
-              </div>
-              <p className="text-xs font-bold text-slate-900">Koppolu, Ongole, Andhra Pradesh</p>
+          <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm text-center space-y-3">
+            <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-orange-50 text-[#ea511c] mx-auto">
+              <MapPin className="w-5 h-5" />
             </div>
-
-            <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-1 shadow-2xs">
-              <div className="flex items-center gap-1.5 text-[#0a4ba6] font-bold text-xs">
-                <Building className="w-3.5 h-3.5 text-[#0a4ba6]" />
-                <span>City Consultation Office</span>
-              </div>
-              <p className="text-xs font-bold text-slate-900">32-1-28 Venugopalaswami Street, Ongole</p>
+            <div>
+              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
+                Official Head Office
+              </span>
+              <h3 className="text-lg font-serif font-bold text-slate-900 mt-0.5">
+                Founders Office Address
+              </h3>
+            </div>
+            <p className="text-sm font-semibold text-slate-800 max-w-lg mx-auto leading-relaxed">
+              42-106-243, FCI Rd, N. T. R Colony, Koppolu, Ongole, Andhra Pradesh 523286
+            </p>
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-4 text-xs text-slate-600 font-medium">
+              <span>Primary Phone: <strong className="text-slate-900">+91 8464882925</strong></span>
+              <span>•</span>
+              <span>WhatsApp: <strong className="text-slate-900">+91 9959912500</strong></span>
             </div>
           </div>
         </div>

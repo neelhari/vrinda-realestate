@@ -37,6 +37,24 @@ export default function Hero({ headline, subheadline }: HeroProps) {
           transition={{ duration: 0.6 }}
           className="max-w-2xl space-y-4 sm:space-y-6"
         >
+          {/* Modern Editorial Header Elements (No Badges/Pills) */}
+          <div className="space-y-2.5">
+            {/* 1. Architectural Brand Eyebrow with gold accent line */}
+            <div className="flex items-center gap-2.5 text-xs sm:text-sm font-semibold tracking-[0.22em] uppercase text-amber-300 [text-shadow:_0_2px_8px_rgba(0,0,0,0.9)]">
+              <span className="w-7 h-[2px] bg-amber-400 rounded-full" />
+              <span>Premier Living & Open Plots</span>
+            </div>
+
+            {/* 2. Live Growth Corridor Indicator with subtle pulse */}
+            <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-100/90 font-medium tracking-wide [text-shadow:_0_2px_8px_rgba(0,0,0,0.85)]">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+              </span>
+              <span>Active Ventures in Ongole & Koppolu Corridors</span>
+            </div>
+          </div>
+
           {/* Large Headline */}
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif text-white leading-tight font-bold tracking-tight [text-shadow:_0_3px_16px_rgba(0,0,0,0.9)]">
             {headline || 'Find a Place Worth Calling Home.'}

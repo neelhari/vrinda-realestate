@@ -229,6 +229,72 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
           </div>
         </div>
 
+        {/* 5. ON-GROUND YOUTUBE VIDEO WALKTHROUGH (If provided) */}
+        {property.videoUrl && (
+          <div className="space-y-3 pt-2">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-red-600"></span>
+                <span>On-Ground Video Walkthrough & Drone Tour</span>
+              </h2>
+              <a
+                href={property.videoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-bold text-red-600 hover:underline"
+              >
+                Watch on YouTube →
+              </a>
+            </div>
+
+            <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 shadow-md">
+              {(() => {
+                const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+                const match = property.videoUrl.match(regExp);
+                const videoId = match && match[2].length === 11 ? match[2] : null;
+                return videoId ? (
+                  <iframe
+                    src={`https://www.youtube.com/embed/${videoId}`}
+                    title="Venture Video Walkthrough"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="w-full h-full border-0"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full text-white text-xs">
+                    <a href={property.videoUrl} target="_blank" rel="noopener noreferrer" className="underline">
+                      Click to Watch Video on YouTube
+                    </a>
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+        )}
+
+        {/* 6. MASTER LAYOUT PLAN / BROCHURE (If provided) */}
+        {property.floorPlanUrl && (
+          <div className="space-y-3 pt-2">
+            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+              Master Layout Plan & Documentation
+            </h2>
+            <div className="p-5 rounded-2xl bg-[#f8fafc] border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="space-y-0.5 text-center sm:text-left">
+                <h4 className="text-sm font-bold text-slate-900">Verified Layout Sketch & Venture Map</h4>
+                <p className="text-xs text-slate-500">Includes road widths, plot boundary markings, and survey numbers.</p>
+              </div>
+              <a
+                href={property.floorPlanUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-slate-900 hover:bg-[#0a4ba6] text-white rounded-xl text-xs font-bold transition-colors shrink-0"
+              >
+                View Layout Document
+              </a>
+            </div>
+          </div>
+        )}
+
         {/* 5. DIRECT REDIRECT TO WHATSAPP & SITE VISIT (No instant enquiry form clutter) */}
         <div className="pt-4 border-t border-slate-200">
           <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-center space-y-4">

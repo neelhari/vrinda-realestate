@@ -120,15 +120,8 @@ export default function Footer() {
             <div className="flex items-start gap-2.5 text-xs text-slate-300">
               <MapPin className="w-4 h-4 text-[#ea511c] shrink-0 mt-0.5" />
               <div>
-                <p className="font-medium text-white">Business Location:</p>
-                <p>Koppolu, Ongole, Andhra Pradesh, India</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-2.5 text-xs text-slate-300">
-              <ShieldCheck className="w-4 h-4 text-[#0a4ba6] shrink-0 mt-0.5" />
-              <div>
-                <p className="font-medium text-white">Founder Office:</p>
-                <p>32-1-28 Venugopalaswami St, Near Venugopalaswami Temple, Ongole, AP</p>
+                <p className="font-medium text-white">Founders Office:</p>
+                <p className="leading-relaxed">42-106-243, FCI Rd, N. T. R Colony, Koppolu, Ongole, Andhra Pradesh 523286</p>
               </div>
             </div>
             <div className="flex items-center gap-2.5 text-xs text-slate-300">
