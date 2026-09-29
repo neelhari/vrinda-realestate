@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
-import { Phone, Mail, MapPin, MessageSquare, ArrowUpRight, ShieldCheck } from 'lucide-react';
-import { InstagramIcon, YouTubeIcon } from '@/components/icons/SocialIcons';
+import { Phone, Mail, MapPin, ArrowUpRight, ShieldCheck } from 'lucide-react';
+import { InstagramIcon, YouTubeIcon, WhatsAppIcon } from '@/components/icons/SocialIcons';
 import { buildWhatsAppUrl, buildPhoneUrl } from '@/lib/utils';
 
 export default function Footer() {
@@ -12,12 +12,12 @@ export default function Footer() {
           
           {/* Brand Column */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="relative h-12 w-48 bg-white/95 rounded-lg px-2.5 py-1.5 inline-block">
+            <div className="relative h-12 w-40 bg-white rounded-lg px-2.5 py-1.5 inline-block">
               <Image
                 src="/images/vrinda-logo.png"
                 alt="Vrinda Real Estate"
                 fill
-                sizes="192px"
+                sizes="160px"
                 className="object-contain object-left"
               />
             </div>
@@ -47,10 +47,10 @@ export default function Footer() {
                 href={buildWhatsAppUrl('9959912500', 'Hello Vrinda Real Estate, I would like to connect regarding property in Ongole.')}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-slate-800 hover:bg-emerald-600 flex items-center justify-center text-slate-300 hover:text-white transition-all duration-200"
+                className="w-9 h-9 rounded-full bg-slate-800 hover:bg-[#25D366] flex items-center justify-center text-slate-300 hover:text-white transition-all duration-200"
                 aria-label="WhatsApp Support"
               >
-                <MessageSquare className="w-4 h-4" />
+                <WhatsAppIcon className="w-4 h-4" />
               </a>
             </div>
           </div>
@@ -141,7 +141,7 @@ export default function Footer() {
               </a>
             </div>
             <div className="flex items-center gap-2.5 text-xs text-slate-300">
-              <MessageSquare className="w-4 h-4 text-emerald-400 shrink-0" />
+              <WhatsAppIcon className="w-4 h-4 text-[#25D366] shrink-0" />
               <a
                 href={buildWhatsAppUrl('9959912500', 'Hello Vrinda Real Estate, I want to inquire about properties.')}
                 target="_blank"

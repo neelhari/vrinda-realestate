@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import FloatingWhatsApp from "@/components/layout/FloatingWhatsApp";
-import MobileBottomBar from "@/components/layout/MobileBottomBar";
 
 const jakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -146,7 +145,6 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col font-sans bg-[#ffffff] text-[#0b1329] selection:bg-[#0a4ba6]/10 selection:text-[#0a4ba6]">
         {children}
         <FloatingWhatsApp />
-        <MobileBottomBar />
       </body>
     </html>
   );

@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Calendar, MessageSquare, Phone, ArrowRight } from 'lucide-react';
+import { Calendar, Phone, ArrowRight } from 'lucide-react';
+import { WhatsAppIcon } from '@/components/icons/SocialIcons';
 import { buildWhatsAppUrl, buildPhoneUrl } from '@/lib/utils';
 
 export default function FinalCTA() {
@@ -43,9 +44,9 @@ export default function FinalCTA() {
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full text-xs sm:text-sm font-semibold shadow-md transition-all active:scale-95"
+            className="inline-flex items-center gap-2 px-6 py-4 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full text-xs sm:text-sm font-semibold shadow-md transition-all active:scale-95"
           >
-            <MessageSquare className="w-4 h-4" />
+            <WhatsAppIcon className="w-4 h-4 text-white" />
             <span>WhatsApp Us</span>
           </a>
 

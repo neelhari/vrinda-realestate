@@ -2,7 +2,8 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { ArrowRight, Calendar, MessageSquare, CheckCircle2, Shield } from 'lucide-react';
+import { ArrowRight, Calendar, CheckCircle2, Shield } from 'lucide-react';
+import { WhatsAppIcon } from '@/components/icons/SocialIcons';
 import { buildWhatsAppUrl } from '@/lib/utils';
 
 interface HeroProps {
@@ -73,9 +74,9 @@ export default function Hero({ headline, subheadline }: HeroProps) {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-full text-sm font-medium backdrop-blur-md transition-all duration-200"
+              className="inline-flex items-center gap-2 px-4 py-3.5 bg-[#25D366]/20 hover:bg-[#25D366]/30 text-white border border-[#25D366]/40 rounded-full text-sm font-medium backdrop-blur-md transition-all duration-200"
             >
-              <MessageSquare className="w-4 h-4 text-emerald-400" />
+              <WhatsAppIcon className="w-4 h-4 text-[#25D366]" />
               <span>WhatsApp Us</span>
             </a>
           </div>

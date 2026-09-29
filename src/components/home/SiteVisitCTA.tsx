@@ -2,7 +2,8 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { Calendar, MessageSquare, Phone, MapPin, CheckCircle } from 'lucide-react';
+import { Calendar, Phone, MapPin, CheckCircle } from 'lucide-react';
+import { WhatsAppIcon } from '@/components/icons/SocialIcons';
 import { buildWhatsAppUrl, buildPhoneUrl } from '@/lib/utils';
 
 export default function SiteVisitCTA() {
@@ -71,9 +72,9 @@ export default function SiteVisitCTA() {
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-full text-xs sm:text-sm font-semibold backdrop-blur-md transition-all"
+                  className="inline-flex items-center gap-2 px-5 py-3.5 bg-[#25D366]/20 hover:bg-[#25D366]/30 text-white border border-[#25D366]/40 rounded-full text-xs sm:text-sm font-semibold backdrop-blur-md transition-all"
                 >
-                  <MessageSquare className="w-4 h-4 text-emerald-400" />
+                  <WhatsAppIcon className="w-4 h-4 text-[#25D366]" />
                   <span>WhatsApp 9959912500</span>
                 </a>
 
