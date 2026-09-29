@@ -2,7 +2,8 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { ShieldCheck, MapPin, CheckCircle, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ShieldCheck, MapPin, CheckCircle, ArrowRight, Sparkles } from 'lucide-react';
 
 interface BrandTrustProps {
   story?: string;
@@ -10,16 +11,22 @@ interface BrandTrustProps {
 
 export default function BrandTrust({ story }: BrandTrustProps) {
   return (
-    <section className="py-24 bg-[#f8fafc] border-b border-slate-200">
+    <section className="py-14 sm:py-18 bg-[#f8fafc] border-b border-slate-200 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           
           {/* Left Column: Founder Photo Treatment */}
-          <div className="lg:col-span-5">
-            <div className="relative mx-auto max-w-md lg:max-w-none">
+          <motion.div 
+            initial={{ opacity: 0, x: -25 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-5"
+          >
+            <div className="relative mx-auto max-w-sm lg:max-w-none">
               {/* Outer decorative border/card */}
-              <div className="relative rounded-3xl overflow-hidden shadow-xl bg-white p-2.5 border border-slate-200">
-                <div className="relative h-[460px] sm:h-[520px] w-full rounded-2xl overflow-hidden bg-slate-100">
+              <div className="relative rounded-2xl overflow-hidden shadow-lg bg-white p-2 border border-slate-200">
+                <div className="relative h-[380px] sm:h-[440px] w-full rounded-xl overflow-hidden bg-slate-100">
                   <Image
                     src="/images/founder-ayyappa-sai.png"
                     alt="Bejapur Ayyappa Sai, Founder of Vrinda Real Estate"
@@ -31,20 +38,20 @@ export default function BrandTrust({ story }: BrandTrustProps) {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   
                   {/* Founder badge on photo */}
-                  <div className="absolute bottom-6 left-6 right-6 text-white space-y-1">
-                    <p className="text-[10px] font-mono tracking-widest uppercase font-semibold text-[#ea511c]">
+                  <div className="absolute bottom-5 left-5 right-5 text-white space-y-0.5">
+                    <p className="text-[10px] font-mono tracking-widest uppercase font-semibold text-amber-400">
                       FOUNDER & LEAD ADVISOR
                     </p>
-                    <h3 className="text-xl font-bold font-serif">Bejapur Ayyappa Sai</h3>
+                    <h3 className="text-lg font-bold font-serif">Bejapur Ayyappa Sai</h3>
                     <p className="text-xs text-slate-300">Vrinda Real Estate • Ongole, AP</p>
                   </div>
                 </div>
               </div>
 
               {/* Floating Verification Tag */}
-              <div className="absolute -bottom-4 -right-2 sm:-right-4 bg-white p-4 rounded-2xl shadow-xl border border-slate-100 max-w-[210px] hidden sm:flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#0a4ba6]/10 flex items-center justify-center text-[#0a4ba6] shrink-0">
-                  <ShieldCheck className="w-5 h-5" />
+              <div className="absolute -bottom-3 -right-2 sm:-right-3 bg-white p-3 rounded-xl shadow-lg border border-slate-100 max-w-[190px] hidden sm:flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-[#0a4ba6]/10 flex items-center justify-center text-[#0a4ba6] shrink-0">
+                  <ShieldCheck className="w-4 h-4" />
                 </div>
                 <div>
                   <p className="text-xs font-bold text-slate-900 leading-tight">100% Clear Titles</p>
@@ -52,10 +59,16 @@ export default function BrandTrust({ story }: BrandTrustProps) {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column: Editorial Brand Story & Principles */}
-          <div className="lg:col-span-7 space-y-6">
+          <motion.div 
+            initial={{ opacity: 0, x: 25 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-7 space-y-4 sm:space-y-5"
+          >
             
             <div className="space-y-2">
               <span className="text-[11px] font-mono tracking-widest text-[#ea511c] uppercase">
@@ -115,7 +128,7 @@ export default function BrandTrust({ story }: BrandTrustProps) {
               </a>
             </div>
 
-          </div>
+          </motion.div>
 
         </div>
       </div>

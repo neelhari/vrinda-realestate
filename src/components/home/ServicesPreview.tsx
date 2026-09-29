@@ -1,26 +1,24 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ServiceItem } from '@/lib/types';
-import { ArrowRight, Check, Compass, FileCheck, Home, MapPin, Car } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowRight, Check, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 
 interface ServicesPreviewProps {
   services?: ServiceItem[];
 }
 
 export default function ServicesPreview({ services = [] }: ServicesPreviewProps) {
-  const [activeTab, setActiveTab] = useState(0);
-
   const defaultServices = [
     {
       id: 'srv-1',
       title: 'Residential Open Plots',
-      shortDesc: 'Verified, clear-title open plots in master-planned gated layouts.',
+      shortDesc: 'Verified, clear-title open plots in master-planned gated layouts in Koppolu.',
       features: [
-        '100% Verified clear land titles with 30-year EC',
+        '100% Verified clear land titles with 30-yr EC',
         'Immediate spot registration assistance',
-        '40ft & 33ft wide blacktop roads with drainage',
-        'High capital appreciation in Koppolu corridor'
+        '40ft & 33ft wide blacktop roads with drainage'
       ],
       ctaText: 'Explore Available Plots',
       ctaHref: '/plots'
@@ -31,8 +29,7 @@ export default function ServicesPreview({ services = [] }: ServicesPreviewProps)
       shortDesc: 'Complimentary on-ground tours with our local property specialists.',
       features: [
         'Flexible weekend & weekday scheduling',
-        'Physical boundary stone & setback inspection',
-        'Neighborhood infrastructure & road connectivity review',
+        'Boundary stone & setback inspection',
         'Direct consultation with founder Ayyappa Sai'
       ],
       ctaText: 'Schedule a Free Tour',
@@ -41,12 +38,11 @@ export default function ServicesPreview({ services = [] }: ServicesPreviewProps)
     {
       id: 'srv-3',
       title: 'Legal & Registration Support',
-      shortDesc: 'Seamless end-to-end documentation from title check to Sub-Registrar deed.',
+      shortDesc: 'Seamless documentation from title check to Sub-Registrar deed.',
       features: [
         '30-year link document verification',
         'Drafting government-compliant sale deeds',
-        'Sub-registrar slot booking & in-person accompaniment',
-        'Post-sale revenue mutation guidance'
+        'Sub-registrar slot booking & in-person support'
       ],
       ctaText: 'Consult Legal Team',
       ctaHref: '/consultation'
@@ -57,8 +53,7 @@ export default function ServicesPreview({ services = [] }: ServicesPreviewProps)
       shortDesc: 'Contemporary gated community duplexes and standalone custom homes.',
       features: [
         '100% Vaastu compliant modern architecture',
-        'Quality construction with private gardens & car porch',
-        'Move-in ready & under-construction choices',
+        'Move-in ready & custom construction choices',
         'Prime residential enclaves in Ongole'
       ],
       ctaText: 'View Villas & Houses',
@@ -67,72 +62,154 @@ export default function ServicesPreview({ services = [] }: ServicesPreviewProps)
   ];
 
   const items = services.length > 0 ? services : defaultServices;
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const scrollToIndex = (index: number) => {
+    if (!scrollContainerRef.current) return;
+    const container = scrollContainerRef.current;
+    const cardWidth = container.querySelector('.service-card')?.clientWidth || 320;
+    const gap = 20;
+    const targetScroll = index * (cardWidth + gap);
+    container.scrollTo({ left: targetScroll, behavior: 'smooth' });
+    setCurrentIndex(index);
+  };
+
+  const handleNext = () => {
+    const nextIdx = (currentIndex + 1) % items.length;
+    scrollToIndex(nextIdx);
+  };
+
+  const handlePrev = () => {
+    const prevIdx = (currentIndex - 1 + items.length) % items.length;
+    scrollToIndex(prevIdx);
+  };
+
+  // Automatic horizontal scrolling one by one
+  useEffect(() => {
+    if (isHovered) return;
+    const interval = setInterval(() => {
+      handleNext();
+    }, 3800);
+
+    return () => clearInterval(interval);
+  }, [currentIndex, isHovered, items.length]);
 
   return (
-    <section className="py-24 bg-[#f8fafc] border-b border-slate-200">
+    <section className="py-14 sm:py-18 bg-[#f8fafc] border-b border-slate-200 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 pb-6 border-b border-slate-200">
-          <div className="space-y-2">
-            <span className="text-[11px] font-mono tracking-widest text-[#ea511c] uppercase">
-              04 — CAPABILITIES
-            </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif text-[#0b1329] font-bold tracking-tight">
-              Real Estate Advisory & Services
+        {/* Compact Header with Slide Controls */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4 pb-4 border-b border-slate-200">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0a4ba6]/10 text-[#0a4ba6] text-xs font-semibold uppercase tracking-wider mb-2">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>CAPABILITIES & ADVISORY</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif text-[#0b1329] font-bold tracking-tight">
+              Real Estate Services
             </h2>
           </div>
-          <a
-            href="/services"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0a4ba6] hover:text-[#ea511c] group self-start md:self-auto"
-          >
-            <span>View All Services</span>
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </a>
+
+          <div className="flex items-center justify-between sm:justify-end gap-4">
+            <a
+              href="/services"
+              className="text-xs font-bold text-[#0a4ba6] hover:text-[#ea511c] transition-colors"
+            >
+              View All Services →
+            </a>
+
+            {/* Slider Arrow Controls */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handlePrev}
+                className="w-8 h-8 rounded-full border border-slate-300 hover:border-slate-800 bg-white text-slate-700 flex items-center justify-center transition-colors active:scale-95 shadow-2xs"
+                aria-label="Previous Service"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                onClick={handleNext}
+                className="w-8 h-8 rounded-full bg-[#0a4ba6] hover:bg-[#073575] text-white flex items-center justify-center transition-colors active:scale-95 shadow-2xs"
+                aria-label="Next Service"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* 4-Item Clean Architectural Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {items.slice(0, 4).map((srv, idx) => (
-            <div
-              key={srv.id}
-              className="bg-white p-8 sm:p-10 rounded-3xl border border-slate-200/90 shadow-xs hover:border-slate-300 hover:shadow-md transition-all duration-300 flex flex-col justify-between space-y-6"
-            >
-              <div className="space-y-4">
-                <div className="flex items-baseline justify-between border-b border-slate-100 pb-4">
-                  <span className="text-xs font-mono text-[#ea511c] font-bold">0{idx + 1}</span>
-                  <span className="text-[11px] font-mono text-slate-400 uppercase">Vrinda Service</span>
+        {/* Compact Horizontal Auto-scrolling Carousel */}
+        <div 
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          onTouchStart={() => setIsHovered(true)}
+          onTouchEnd={() => setIsHovered(false)}
+          className="relative"
+        >
+          <div
+            ref={scrollContainerRef}
+            className="flex gap-5 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-4 pt-1"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {items.map((srv, idx) => (
+              <motion.div
+                key={srv.id}
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.2 }}
+                className="service-card flex-none w-[280px] sm:w-[320px] md:w-[340px] snap-start bg-white p-6 rounded-2xl border border-slate-200/90 shadow-xs hover:border-[#0a4ba6]/40 hover:shadow-md transition-all flex flex-col justify-between"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                    <span className="text-xs font-mono text-[#ea511c] font-bold">0{idx + 1}</span>
+                    <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Vrinda Advisory</span>
+                  </div>
+
+                  <h3 className="text-lg font-serif font-bold text-slate-900 line-clamp-1">
+                    {srv.title}
+                  </h3>
+
+                  <p className="text-xs text-slate-600 leading-relaxed font-light line-clamp-2">
+                    {srv.shortDesc}
+                  </p>
+
+                  <div className="space-y-1.5 pt-1">
+                    {srv.features?.slice(0, 3).map((f, i) => (
+                      <div key={i} className="flex items-start gap-1.5 text-xs text-slate-700">
+                        <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                        <span className="line-clamp-1">{f}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
-                <h3 className="text-xl sm:text-2xl font-serif font-bold text-slate-900">
-                  {srv.title}
-                </h3>
-
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-light">
-                  {srv.shortDesc}
-                </p>
-
-                <div className="space-y-2 pt-2">
-                  {srv.features?.slice(0, 3).map((f, i) => (
-                    <div key={i} className="flex items-start gap-2 text-xs text-slate-700">
-                      <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                      <span>{f}</span>
-                    </div>
-                  ))}
+                <div className="pt-4 mt-4 border-t border-slate-100">
+                  <a
+                    href={(srv as any).ctaHref || '/services'}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0a4ba6] hover:text-[#ea511c] transition-colors group"
+                  >
+                    <span>{srv.ctaText || 'Learn More'}</span>
+                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                  </a>
                 </div>
-              </div>
+              </motion.div>
+            ))}
+          </div>
 
-              <div className="pt-4 border-t border-slate-100">
-                <a
-                  href={(srv as any).ctaHref || '/services'}
-                  className="inline-flex items-center gap-2 text-xs font-bold text-[#0a4ba6] hover:text-[#ea511c] transition-colors"
-                >
-                  <span>{srv.ctaText || 'Learn More'}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
-          ))}
+          {/* Dots Indicator */}
+          <div className="flex justify-center items-center gap-1.5 mt-2">
+            {items.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => scrollToIndex(i)}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  currentIndex === i ? 'w-6 bg-[#0a4ba6]' : 'w-2 bg-slate-300'
+                }`}
+                aria-label={`Go to slide ${i + 1}`}
+              />
+            ))}
+          </div>
         </div>
 
       </div>

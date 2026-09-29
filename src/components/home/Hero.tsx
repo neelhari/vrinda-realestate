@@ -2,7 +2,8 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { ArrowRight, Calendar, CheckCircle2, Shield } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowRight, CheckCircle2, Shield } from 'lucide-react';
 import { WhatsAppIcon } from '@/components/icons/SocialIcons';
 import { buildWhatsAppUrl } from '@/lib/utils';
 
@@ -15,7 +16,7 @@ export default function Hero({ headline, subheadline }: HeroProps) {
   const whatsappUrl = buildWhatsAppUrl('9959912500', 'Hello Vrinda Real Estate, I would like to enquire about available properties in Ongole.');
 
   return (
-    <section className="relative min-h-[90vh] lg:min-h-screen flex items-center justify-center pt-24 pb-16 overflow-hidden bg-[#0b1329]">
+    <section className="relative min-h-[90vh] lg:min-h-screen flex items-center justify-center pt-20 pb-16 overflow-hidden bg-[#0b1329]">
       {/* Background Architectural Image with subtle gradient overlay */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -31,69 +32,91 @@ export default function Hero({ headline, subheadline }: HeroProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-[#0b1329] via-transparent to-[#0b1329]/40" />
       </div>
 
-      {/* Main Content Container */}
+      {/* Main Content Container with Staggered Entrance */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="max-w-2xl lg:max-w-3xl space-y-6">
+        <motion.div 
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-2xl lg:max-w-3xl space-y-6"
+        >
           
-          {/* Eyebrow Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-white text-xs font-medium tracking-wider uppercase">
-            <span className="w-2 h-2 rounded-full bg-[#ea511c]"></span>
-            <span>VRINDA REAL ESTATE • ONGOLE</span>
-          </div>
+          {/* Refined Luxury Location / Trust Badge */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-slate-200 text-xs font-medium tracking-wide shadow-sm"
+          >
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+            <span>Verified Land & Luxury Living • Ongole</span>
+          </motion.div>
 
           {/* Large Headline */}
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif text-white leading-[1.15] font-semibold tracking-tight">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="text-3xl sm:text-5xl lg:text-6xl font-serif text-white leading-[1.15] font-semibold tracking-tight"
+          >
             {headline || 'Find a Place Worth Calling Home.'}
-          </h1>
+          </motion.h1>
 
           {/* Supporting Text */}
-          <p className="text-base sm:text-lg text-slate-200/90 leading-relaxed max-w-2xl font-light">
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="text-base sm:text-lg text-slate-200/90 leading-relaxed max-w-2xl font-light"
+          >
             {subheadline ||
               'Premium residential open plots, luxury villas, and independent homes in carefully selected, high-growth corridors across Ongole, Koppolu, and Andhra Pradesh.'}
-          </p>
+          </motion.p>
 
-          {/* CTA Action Cluster */}
-          <div className="pt-2 flex flex-wrap items-center gap-3 sm:gap-4">
+          {/* Clean 2-CTA Action Cluster: Explore Properties & Direct WhatsApp */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+            className="pt-2 flex flex-wrap items-center gap-3 sm:gap-4"
+          >
             <a
               href="/properties"
-              className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-[#0a4ba6] hover:bg-[#073575] text-white rounded-full text-sm font-semibold transition-all duration-200 shadow-lg hover:shadow-xl group active:scale-95"
+              className="inline-flex items-center gap-2.5 px-7 py-4 bg-[#0a4ba6] hover:bg-[#073575] text-white rounded-full text-sm font-semibold transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 group active:scale-95 border border-white/10"
             >
               <span>Explore Properties</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </a>
 
             <a
-              href="/site-visit"
-              className="inline-flex items-center gap-2 px-5 py-3.5 bg-white hover:bg-slate-100 text-[#0b1329] rounded-full text-sm font-semibold transition-all duration-200 shadow-md active:scale-95"
-            >
-              <Calendar className="w-4 h-4 text-[#0a4ba6]" />
-              <span>Book a Site Visit</span>
-            </a>
-
-            <a
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-3.5 bg-[#25D366]/20 hover:bg-[#25D366]/30 text-white border border-[#25D366]/40 rounded-full text-sm font-medium backdrop-blur-md transition-all duration-200"
+              className="inline-flex items-center gap-2.5 px-6 py-4 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full text-sm font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 border border-white/20"
             >
-              <WhatsAppIcon className="w-4 h-4 text-[#25D366]" />
+              <WhatsAppIcon className="w-4 h-4 text-white" />
               <span>WhatsApp Us</span>
             </a>
-          </div>
+          </motion.div>
 
           {/* Quick Trust Badges */}
-          <div className="pt-4 flex flex-wrap items-center gap-4 text-xs text-slate-300">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="pt-4 flex flex-wrap items-center gap-4 text-xs text-slate-300"
+          >
             <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-[#ea511c]" />
+              <CheckCircle2 className="w-4 h-4 text-amber-400" />
               <span>100% Clear Title Verification</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Shield className="w-4 h-4 text-emerald-400" />
               <span>End-to-End Registration Support</span>
             </div>
-          </div>
+          </motion.div>
 
-        </div>
+        </motion.div>
       </div>
 
       {/* Bottom Information Strip */}
