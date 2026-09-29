@@ -35,9 +35,9 @@ export default function PropertyCard({ property }: PropertyCardProps) {
     : '/images/hero-luxury-villa.jpg';
 
   return (
-    <div className="group flex flex-col rounded-2xl overflow-hidden border border-slate-200 bg-white hover:border-slate-300 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-      {/* Property Image Container */}
-      <div className="relative h-60 w-full overflow-hidden bg-slate-100">
+    <div className="group flex flex-col rounded-2xl overflow-hidden border border-slate-200/90 bg-white hover:border-[#0a4ba6]/30 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+      {/* 70% Visual Dominance: High-Res Image Container */}
+      <div className="relative h-52 sm:h-60 w-full overflow-hidden bg-slate-100">
         <Image
           src={mainImage}
           alt={property.title}
@@ -46,100 +46,67 @@ export default function PropertyCard({ property }: PropertyCardProps) {
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
         
-        {/* Dark subtle gradient for readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
+        {/* Subtle Luxury Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/25" />
 
-        {/* Top Badges */}
-        <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-          <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-white/90 backdrop-blur-md text-[#0a4ba6] shadow-xs">
-            {typeLabels[property.type]}
-          </span>
-          <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wide ${statusColors[property.status]}`}>
-            {property.status}
-          </span>
-        </div>
-
-        {/* Verification Tag */}
-        {(property.dtcpApproved || property.reraApproved) && (
-          <div className="absolute bottom-3 left-3 flex items-center gap-1 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-md text-emerald-400 text-[11px] font-medium">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Verified Clear Title</span>
+        {/* Bottom subtle area tag */}
+        <div className="absolute bottom-2.5 right-2.5 pointer-events-none">
+          <div className="px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-xs text-white text-[10px] font-medium">
+            {property.area} {property.areaUnit}
           </div>
-        )}
+        </div>
       </div>
 
-      {/* Property Details */}
-      <div className="p-5 flex flex-col justify-between grow space-y-4">
+      {/* 30% Compact Content: Minimal & Modern Editorial Info */}
+      <div className="p-3.5 sm:p-4 flex flex-col justify-between grow space-y-2.5">
         <div>
-          {/* Location */}
-          <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-1.5">
-            <MapPin className="w-3.5 h-3.5 text-[#ea511c] shrink-0" />
-            <span className="truncate">{property.location}</span>
+          {/* Modern Editorial Eyebrow */}
+          <div className="flex items-center justify-between gap-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-1">
+            <span className="text-[#0a4ba6] font-bold">{typeLabels[property.type]}</span>
+            <span className="truncate text-slate-400">{property.location}</span>
           </div>
 
           {/* Title */}
           <a
             href={`/properties/${property.slug}`}
-            className="block text-base font-serif font-bold text-slate-900 group-hover:text-[#0a4ba6] transition-colors leading-snug line-clamp-2"
+            className="block text-sm sm:text-base font-serif font-bold text-slate-900 group-hover:text-[#0a4ba6] transition-colors leading-snug line-clamp-1"
           >
             {property.title}
           </a>
 
-          {/* Quick Specifications */}
-          <div className="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-slate-100 text-xs text-slate-600">
-            <div className="flex items-center gap-1.5">
-              <Maximize2 className="w-3.5 h-3.5 text-slate-400" />
-              <span>{property.area} {property.areaUnit}</span>
-            </div>
-            {property.facing && (
-              <div className="flex items-center gap-1.5 truncate">
-                <Check className="w-3.5 h-3.5 text-[#ea511c]" />
-                <span className="truncate">{property.facing}</span>
-              </div>
-            )}
-            {property.bedrooms && (
-              <div className="flex items-center gap-1.5">
-                <Bed className="w-3.5 h-3.5 text-slate-400" />
-                <span>{property.bedrooms} Beds</span>
-              </div>
-            )}
-            {property.bathrooms && (
-              <div className="flex items-center gap-1.5">
-                <Bath className="w-3.5 h-3.5 text-slate-400" />
-                <span>{property.bathrooms} Baths</span>
-              </div>
+          {/* Compact Specs Line */}
+          <div className="flex items-center gap-2 mt-2 pt-2 border-t border-slate-100 text-[11px] text-slate-600 truncate">
+            <span className="font-medium text-slate-700">{property.facing ? `${property.facing} Facing` : 'Prime Plot'}</span>
+            <span className="text-slate-300">•</span>
+            <span>{property.bedrooms ? `${property.bedrooms} BHK` : 'Immediate Reg.'}</span>
+            {(property.dtcpApproved || property.reraApproved) && (
+              <>
+                <span className="text-slate-300">•</span>
+                <span className="text-emerald-700 font-medium truncate">Clear Title</span>
+              </>
             )}
           </div>
         </div>
 
-        {/* Pricing & CTAs */}
-        <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-          <div>
-            <p className="text-[10px] text-slate-400 uppercase font-medium">Pricing</p>
-            <p className="text-sm font-bold text-[#0a4ba6]">
-              {property.priceLabel || 'Contact for Price'}
-            </p>
-          </div>
+        {/* Action Buttons */}
+        <div className="pt-2 border-t border-slate-100 grid grid-cols-2 gap-2">
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-1 py-2 px-2.5 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white transition-colors text-xs font-semibold text-center"
+            title="Quick WhatsApp Enquiry"
+          >
+            WhatsApp
+          </a>
 
-          <div className="flex items-center gap-2">
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white transition-colors text-xs font-semibold"
-              title="Quick WhatsApp Enquiry"
-            >
-              WhatsApp
-            </a>
-
-            <a
-              href={`/properties/${property.slug}`}
-              className="inline-flex items-center gap-1 px-3 py-2 rounded-lg bg-slate-900 hover:bg-[#0a4ba6] text-white text-xs font-semibold transition-colors"
-            >
-              <span>View</span>
-              <ArrowRight className="w-3 h-3" />
-            </a>
-          </div>
+          <a
+            href={`/properties/${property.slug}`}
+            className="flex items-center justify-center gap-1 py-2 px-2.5 rounded-lg bg-slate-900 hover:bg-[#0a4ba6] text-white text-xs font-semibold transition-colors text-center"
+          >
+            <span>Details</span>
+            <ArrowRight className="w-3 h-3" />
+          </a>
         </div>
       </div>
     </div>

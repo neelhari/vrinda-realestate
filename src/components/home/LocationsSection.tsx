@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { LocationItem } from '@/lib/types';
-import { ChevronLeft, ChevronRight, ArrowUpRight, MapPin, Sparkles } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowUpRight, MapPin } from 'lucide-react';
 
 interface LocationsSectionProps {
   locations?: LocationItem[];
@@ -83,13 +83,13 @@ export default function LocationsSection({ locations = [] }: LocationsSectionPro
   }, [currentIndex, isHovered, items.length]);
 
   return (
-    <section className="py-14 sm:py-18 bg-[#0b1329] text-white relative overflow-hidden">
+    <section className="py-14 sm:py-18 bg-[#181716] text-white relative overflow-hidden border-y border-stone-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header with Nav Controls */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4 pb-4 border-b border-white/10">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4 pb-4 border-b border-stone-800">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-slate-300 text-xs font-semibold uppercase tracking-wider mb-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-semibold uppercase tracking-wider mb-2">
               <MapPin className="w-3.5 h-3.5 text-amber-400" />
               <span>KEY INVESTMENT BELTS</span>
             </div>
@@ -99,18 +99,18 @@ export default function LocationsSection({ locations = [] }: LocationsSectionPro
           </div>
 
           <div className="flex items-center justify-between sm:justify-end gap-3">
-            <span className="text-xs text-slate-400 hidden sm:inline">Auto-scrolling corridors</span>
+            <span className="text-xs text-stone-400 hidden sm:inline">Auto-scrolling corridors</span>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => handleScroll('left')}
-                className="w-8 h-8 rounded-full border border-white/20 hover:border-white text-white flex items-center justify-center transition-colors active:scale-95"
+                className="w-8 h-8 rounded-full border border-stone-700 hover:border-amber-400 text-stone-300 hover:text-white bg-stone-900 flex items-center justify-center transition-colors active:scale-95"
                 aria-label="Scroll left"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 onClick={() => handleScroll('right')}
-                className="w-8 h-8 rounded-full bg-[#0a4ba6] hover:bg-[#073575] text-white flex items-center justify-center transition-colors active:scale-95 shadow-md"
+                className="w-8 h-8 rounded-full bg-amber-600 hover:bg-amber-500 text-white flex items-center justify-center transition-colors active:scale-95 shadow-md"
                 aria-label="Scroll right"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -138,7 +138,7 @@ export default function LocationsSection({ locations = [] }: LocationsSectionPro
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.2 }}
                 href={`/properties?location=${encodeURIComponent(loc.name.split(' ')[0])}`}
-                className="loc-card group relative flex-none w-[260px] sm:w-[320px] md:w-[340px] h-[340px] sm:h-[380px] rounded-2xl overflow-hidden snap-start border border-white/10 shadow-lg"
+                className="loc-card group relative flex-none w-[260px] sm:w-[320px] md:w-[340px] h-[340px] sm:h-[380px] rounded-2xl overflow-hidden snap-start border border-stone-800 shadow-xl"
               >
                 {/* Background Photography */}
                 <Image
@@ -149,11 +149,11 @@ export default function LocationsSection({ locations = [] }: LocationsSectionPro
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
 
-                {/* Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
+                {/* Rich Charcoal Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#181716] via-[#181716]/50 to-transparent" />
 
                 {/* Index tag */}
-                <div className="absolute top-4 right-4 text-[10px] font-mono text-white/70 bg-black/40 backdrop-blur-xs px-2 py-0.5 rounded-md">
+                <div className="absolute top-4 right-4 text-[10px] font-mono text-amber-300 bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-md border border-white/10">
                   0{index + 1}
                 </div>
 
@@ -167,11 +167,11 @@ export default function LocationsSection({ locations = [] }: LocationsSectionPro
                     {loc.name}
                   </h3>
 
-                  <p className="text-xs text-slate-300 leading-relaxed font-light line-clamp-2">
+                  <p className="text-xs text-stone-300 leading-relaxed font-light line-clamp-2">
                     {loc.description}
                   </p>
 
-                  <div className="pt-1 flex items-center gap-1.5 text-xs font-semibold text-white group-hover:text-amber-400 transition-colors">
+                  <div className="pt-1 flex items-center gap-1.5 text-xs font-semibold text-stone-200 group-hover:text-amber-400 transition-colors">
                     <span>Explore available plots</span>
                     <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </div>
@@ -187,7 +187,7 @@ export default function LocationsSection({ locations = [] }: LocationsSectionPro
                 key={i}
                 onClick={() => scrollToIndex(i)}
                 className={`h-1.5 rounded-full transition-all duration-300 ${
-                  currentIndex === i ? 'w-6 bg-amber-400' : 'w-2 bg-white/20'
+                  currentIndex === i ? 'w-6 bg-amber-400' : 'w-2 bg-stone-700'
                 }`}
                 aria-label={`Go to location slide ${i + 1}`}
               />

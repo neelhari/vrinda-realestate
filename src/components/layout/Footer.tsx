@@ -12,12 +12,12 @@ export default function Footer() {
           
           {/* Brand Column */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="relative h-12 w-40 bg-white rounded-lg px-2.5 py-1.5 inline-block">
+            <div className="relative h-11 w-36">
               <Image
                 src="/images/vrinda-logo.png"
                 alt="Vrinda Real Estate"
                 fill
-                sizes="160px"
+                sizes="150px"
                 className="object-contain object-left"
               />
             </div>
@@ -69,9 +69,6 @@ export default function Footer() {
               </li>
               <li>
                 <a href="/properties" className="text-slate-300 hover:text-white transition-colors">All Properties</a>
-              </li>
-              <li>
-                <a href="/services" className="text-slate-300 hover:text-white transition-colors">Our Services</a>
               </li>
               <li>
                 <a href="/site-visit" className="text-slate-300 hover:text-white transition-colors flex items-center gap-1">

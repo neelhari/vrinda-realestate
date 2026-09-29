@@ -1,5 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
+import Image from 'next/image';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import FinalCTA from '@/components/home/FinalCTA';
@@ -20,26 +21,31 @@ export default function PropertiesPage() {
     <main className="min-h-screen flex flex-col bg-white">
       <Navbar />
       
-      {/* Header */}
-      <section className="pt-32 pb-12 bg-[#0b1329] text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0b1329] via-[#073575]/40 to-[#0b1329]" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-[#ea511c] text-xs font-semibold uppercase tracking-wider">
-            <span>VERIFIED PORTFOLIO</span>
+      {/* 100% Bright, Pristine Landscape Photo Banner with Left-Aligned Title & Description Inside (Zero color shade) */}
+      <section className="relative w-full h-56 sm:h-72 lg:h-80 flex items-end pb-6 sm:pb-8 overflow-hidden bg-slate-900">
+        <Image
+          src="/images/category-plots.jpg"
+          alt="Properties in Ongole"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="max-w-2xl text-left space-y-1 sm:space-y-2">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-serif font-bold text-white tracking-tight [text-shadow:_0_3px_12px_rgba(0,0,0,0.9)]">
+              Properties in Ongole
+            </h1>
+            <p className="text-xs sm:text-sm lg:text-base text-white leading-relaxed font-medium [text-shadow:_0_2px_8px_rgba(0,0,0,0.85)] max-w-xl">
+              Explore verified residential plots, contemporary villas, and independent homes with complete legal documentation and prime road connectivity.
+            </p>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-serif font-bold tracking-tight">
-            Available Properties in Ongole
-          </h1>
-          <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto font-light">
-            Discover hand-picked residential open plots, luxury villas, and standalone family houses with complete legal transparency.
-          </p>
         </div>
       </section>
 
       {/* Interactive Client Search & Filter Section */}
       <PropertiesClient initialProperties={properties} />
 
-      <FinalCTA />
       <Footer />
     </main>
   );

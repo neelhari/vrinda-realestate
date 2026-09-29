@@ -1,250 +1,200 @@
 import React from 'react';
-import Image from 'next/image';
 import { Metadata } from 'next';
+import Image from 'next/image';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import FinalCTA from '@/components/home/FinalCTA';
-import { ShieldCheck, MapPin, Award, CheckCircle2, Phone, MessageSquare, Building, Users } from 'lucide-react';
-import { db } from '@/lib/db';
+import { Award, MapPin, Building, Phone } from 'lucide-react';
+import { WhatsAppIcon } from '@/components/icons/SocialIcons';
 import { buildWhatsAppUrl, buildPhoneUrl } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'About Us & Founder Bejapur Ayyappa Sai',
-  description: 'Learn about Vrinda Real Estate, our founder Bejapur Ayyappa Sai, and our commitment to transparent, verified land and home developments in Ongole, Andhra Pradesh.',
+  title: 'About Us & Founders | Vrinda Real Estate Ongole',
+  description: 'Learn about Vrinda Real Estate, our founders, and our commitment to transparent, verified land and home developments in Ongole, Andhra Pradesh.',
 };
 
 export default function AboutPage() {
-  const cms = db.getCMS();
-  const whatsappUrl = buildWhatsAppUrl('9959912500', 'Hello Bejapur Ayyappa Sai garu, I would like to consult with Vrinda Real Estate.');
+  const whatsappUrl = buildWhatsAppUrl('9959912500', 'Hello Vrinda Real Estate, I would like to consult regarding properties in Ongole.');
+  const phoneUrl = buildPhoneUrl('8464882925');
+
+  const stations = [
+    {
+      stationNumber: '01',
+      title: '100% Legal Clearance',
+      description: 'Every plot is vetted through 30-year link documents, certified nil encumbrance (EC), and official revenue sanctions.'
+    },
+    {
+      stationNumber: '02',
+      title: 'Growth Corridors',
+      description: 'Handpicked ventures located strictly in expanding hubs like Koppolu Ring Road and Singarakonda.'
+    },
+    {
+      stationNumber: '03',
+      title: 'Spot Registration',
+      description: 'Immediate title transfer with direct accompaniment and deed support at the Sub-Registrar office.'
+    },
+    {
+      stationNumber: '04',
+      title: 'Zero Middlemen',
+      description: 'Transparent, direct pricing with founder guidance and zero commission markups.'
+    }
+  ];
 
   return (
     <main className="min-h-screen flex flex-col bg-white">
       <Navbar />
 
-      {/* Page Header */}
-      <section className="pt-32 pb-16 bg-[#0b1329] text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0b1329] via-[#073575]/40 to-[#0b1329]" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 text-[#ea511c] text-xs font-semibold uppercase tracking-wider">
-            <Award className="w-3.5 h-3.5" />
-            <span>OUR STORY & HERITAGE</span>
-          </div>
-          <h1 className="text-3xl sm:text-5xl font-serif font-bold tracking-tight">
-            Building Real Estate Trust in Ongole
-          </h1>
-          <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto font-light">
-            Founded by Bejapur Ayyappa Sai with an unwavering commitment to 100% verified titles, spot registrations, and ethical property development.
-          </p>
-        </div>
-      </section>
-
-      {/* Founder Profile Section */}
-      <section className="py-20 bg-[#f8fafc] border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
-            {/* Founder Photo Presentation */}
-            <div className="lg:col-span-5">
-              <div className="relative rounded-3xl overflow-hidden bg-white p-3 shadow-xl border border-slate-200 max-w-md mx-auto">
-                <div className="relative h-[480px] w-full rounded-2xl overflow-hidden bg-slate-100">
-                  <Image
-                    src="/images/founder-ayyappa-sai.png"
-                    alt="Bejapur Ayyappa Sai, Founder & Managing Director"
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 420px"
-                    className="object-cover object-top"
-                    priority
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                  <div className="absolute bottom-5 left-5 right-5 text-white">
-                    <p className="text-xs uppercase tracking-wider font-semibold text-[#ea511c]">
-                      FOUNDER & MANAGING DIRECTOR
-                    </p>
-                    <h2 className="text-xl font-bold font-serif">Bejapur Ayyappa Sai</h2>
-                    <p className="text-xs text-slate-200">Vrinda Real Estate, Ongole</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Founder Message & Bio */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0a4ba6]/10 text-[#0a4ba6] text-xs font-semibold uppercase">
-                <span>FOUNDER'S VISION</span>
-              </div>
-
-              <h2 className="text-2xl sm:text-4xl font-serif text-[#0b1329] font-bold leading-tight">
-                "Real estate isn't just about plots or concrete. It is the foundation of your family's future."
-              </h2>
-
-              <p className="text-slate-600 leading-relaxed text-sm sm:text-base">
-                Welcome to Vrinda Real Estate. Having spent years closely observing the property landscape in Ongole, Koppolu, and Prakasam district, I noticed a fundamental need: buyers deserved absolute clarity, zero hidden clauses, and complete legal security when investing their hard-earned life savings.
-              </p>
-
-              <p className="text-slate-600 leading-relaxed text-sm sm:text-base">
-                Every single residential venture we bring to market is personally vetted for DTCP/RERA approvals, clear revenue records, 30-year link documents, and on-ground infrastructure feasibility. When you partner with Vrinda, you receive my direct personal guarantee of transparency and seamless Sub-Registrar registration.
-              </p>
-
-              {/* Direct Connect Buttons */}
-              <div className="pt-4 flex flex-wrap items-center gap-4">
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full text-xs font-semibold shadow-sm transition-all"
-                >
-                  <MessageSquare className="w-4 h-4" />
-                  <span>Chat with Ayyappa Sai</span>
-                </a>
-
-                <a
-                  href={buildPhoneUrl('8464882925')}
-                  className="inline-flex items-center gap-2 px-5 py-3 bg-slate-900 hover:bg-[#0a4ba6] text-white rounded-full text-xs font-semibold shadow-sm transition-all"
-                >
-                  <Phone className="w-4 h-4" />
-                  <span>Call 8464882925</span>
-                </a>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* Leadership & Co-Founder Team */}
-      <section className="py-20 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0a4ba6]/10 text-[#0a4ba6] text-xs font-semibold uppercase tracking-wider">
-              <Users className="w-3.5 h-3.5" />
-              <span>LEADERSHIP & PARTNERSHIP</span>
-            </div>
-            <h2 className="text-2xl sm:text-4xl font-serif text-[#0b1329] font-bold">
-              Dedicated to Your Property Success
-            </h2>
-            <p className="text-sm text-slate-500">
-              Our core leadership brings deep local insights and unmatched dedication to every venture.
+      {/* 100% Bright, Pristine Architectural Photo Banner with Left-Aligned Title & Description Inside (Zero color shade) */}
+      <section className="relative w-full h-56 sm:h-72 lg:h-80 flex items-end pb-6 sm:pb-8 overflow-hidden bg-slate-900">
+        <Image
+          src="/images/hero-luxury-villa.jpg"
+          alt="About Vrinda Real Estate"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="max-w-2xl text-left space-y-1 sm:space-y-2">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-serif font-bold text-white tracking-tight [text-shadow:_0_3px_12px_rgba(0,0,0,0.9)]">
+              About Vrinda
+            </h1>
+            <p className="text-xs sm:text-sm lg:text-base text-white leading-relaxed font-medium [text-shadow:_0_2px_8px_rgba(0,0,0,0.85)] max-w-xl">
+              Founded with an absolute commitment to 100% clear titles, direct founder guidance, and seamless Sub-Registrar registrations across Ongole.
             </p>
           </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
-            {/* Founder Card */}
-            <div className="bg-[#f8fafc] rounded-3xl p-6 border border-slate-200 flex flex-col items-center text-center space-y-4 shadow-sm">
-              <div className="relative h-64 w-full rounded-2xl overflow-hidden bg-slate-100">
-                <Image
-                  src="/images/founder-ayyappa-sai.png"
-                  alt="Bejapur Ayyappa Sai"
-                  fill
-                  sizes="380px"
-                  className="object-cover object-top"
-                />
-              </div>
-              <div>
-                <h3 className="text-xl font-serif font-bold text-slate-900">Bejapur Ayyappa Sai</h3>
-                <p className="text-xs font-semibold text-[#ea511c] uppercase tracking-wider mt-0.5">Founder & Managing Director</p>
-                <p className="text-xs text-slate-600 mt-2">
-                  Overseeing land acquisition, legal due diligence, venture planning, and client consultations across Ongole.
-                </p>
-              </div>
+      {/* 2. Short Description About Us */}
+      <section className="py-8 sm:py-10 bg-white border-b border-slate-200">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+          <p className="text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
+            Vrinda Real Estate was established with a singular objective: providing buyers with absolute clarity, zero hidden clauses, and complete legal security when investing in land and homes across Ongole, Koppolu, and Prakasam district.
+          </p>
+
+          <div className="flex items-center justify-center gap-3 pt-2">
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-xl text-xs font-semibold shadow-2xs active:scale-95 transition-all"
+            >
+              <WhatsAppIcon className="w-3.5 h-3.5 text-white" />
+              <span>Chat on WhatsApp</span>
+            </a>
+            <a
+              href={phoneUrl}
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-slate-900 hover:bg-[#0a4ba6] text-white rounded-xl text-xs font-semibold shadow-2xs active:scale-95 transition-all"
+            >
+              <Phone className="w-3.5 h-3.5" />
+              <span>Call 8464882925</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Founders (Title: Founders, Below: Image 1 || Image 2 side-by-side with no nested boxes) */}
+      <section className="py-8 sm:py-12 bg-[#f8fafc] border-b border-slate-200">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
+          <div className="text-center">
+            <h2 className="text-xl sm:text-2xl font-serif font-bold text-slate-900">
+              Founders
+            </h2>
+          </div>
+
+          {/* Clean Side-by-Side Images (Image 1 || Image 2, No nested boxes underneath) */}
+          <div className="grid grid-cols-2 gap-3 sm:gap-6 max-w-xl mx-auto">
+            <div className="relative h-44 sm:h-64 rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-slate-100">
+              <Image
+                src="/images/founder-ayyappa-sai.png"
+                alt="Founder Bejapur Ayyappa Sai"
+                fill
+                sizes="280px"
+                className="object-cover object-top"
+                priority
+              />
             </div>
 
-            {/* Co-Founder / Associate Leadership Card */}
-            <div className="bg-[#f8fafc] rounded-3xl p-6 border border-slate-200 flex flex-col items-center text-center space-y-4 shadow-sm">
-              <div className="relative h-64 w-full rounded-2xl overflow-hidden bg-slate-100">
-                <Image
-                  src="/images/founder-partner.png"
-                  alt="Leadership Partner"
-                  fill
-                  sizes="380px"
-                  className="object-cover object-top"
-                />
-              </div>
-              <div>
-                <h3 className="text-xl font-serif font-bold text-slate-900">Executive Partner</h3>
-                <p className="text-xs font-semibold text-[#0a4ba6] uppercase tracking-wider mt-0.5">Site Operations & Client Relations</p>
-                <p className="text-xs text-slate-600 mt-2">
-                  Managing on-ground site visits, customer tours, infrastructure development, and Sub-Registrar coordination.
-                </p>
-              </div>
+            <div className="relative h-44 sm:h-64 rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-slate-100">
+              <Image
+                src="/images/founder-partner.png"
+                alt="Executive Partner"
+                fill
+                sizes="280px"
+                className="object-cover object-top"
+                priority
+              />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Core Principles */}
-      <section className="py-20 bg-[#f8fafc] border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-            <h2 className="text-2xl sm:text-4xl font-serif text-[#0b1329] font-bold">
+      {/* 4. Pillars of Integrity (Railway Track / Connecting Station Route) */}
+      <section className="py-10 sm:py-14 bg-white border-b border-slate-200">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          <div className="text-center">
+            <h2 className="text-xl sm:text-2xl font-serif font-bold text-slate-900">
               Our 4 Pillars of Integrity
             </h2>
-            <p className="text-sm text-slate-500">
-              The non-negotiable standards that govern every property transaction at Vrinda Real Estate.
+            <p className="text-xs text-slate-500 mt-1">
+              The continuous standard guiding every property transaction
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-[#0a4ba6]/10 text-[#0a4ba6] flex items-center justify-center font-bold">01</div>
-              <h3 className="text-base font-bold text-slate-900">100% Legal Transparency</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Complete title verification, EC verification up to 30 years, and clear revenue records before opening for sale.
-              </p>
+          {/* Connected Railway / Metro Station Track */}
+          <div className="relative pl-6 sm:pl-10 space-y-8 max-w-xl mx-auto">
+            
+            {/* Continuous Vertical Railway Track Line */}
+            <div className="absolute left-[15px] sm:left-[23px] top-3 bottom-3 w-[3px] bg-gradient-to-b from-[#0a4ba6] via-[#ea511c] to-emerald-600 rounded-full" />
+
+            {stations.map((st) => (
+              <div key={st.stationNumber} className="relative flex items-start gap-4 sm:gap-5 group">
+                
+                {/* Station Node / Stop Marker */}
+                <div className="w-8 h-8 rounded-full bg-white border-2 border-[#0a4ba6] flex items-center justify-center text-[11px] font-mono font-bold text-[#0a4ba6] shadow-xs shrink-0 -ml-6 sm:-ml-8 z-10 group-hover:scale-110 group-hover:border-[#ea511c] group-hover:text-[#ea511c] transition-all bg-white">
+                  {st.stationNumber}
+                </div>
+
+                {/* Station Content */}
+                <div className="space-y-1 pt-0.5">
+                  <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">
+                    {st.title}
+                  </h3>
+                  <p className="text-xs text-slate-600 leading-relaxed font-light">
+                    {st.description}
+                  </p>
+                </div>
+
+              </div>
+            ))}
+
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Office Addresses */}
+      <section className="py-8 sm:py-12 bg-[#f8fafc]">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-1 shadow-2xs">
+              <div className="flex items-center gap-1.5 text-[#0a4ba6] font-bold text-xs">
+                <MapPin className="w-3.5 h-3.5 text-[#ea511c]" />
+                <span>Primary Office</span>
+              </div>
+              <p className="text-xs font-bold text-slate-900">Koppolu, Ongole, Andhra Pradesh</p>
             </div>
 
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-[#0a4ba6]/10 text-[#0a4ba6] flex items-center justify-center font-bold">02</div>
-              <h3 className="text-base font-bold text-slate-900">True Growth Corridors</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Strategic focus on high-appreciation sectors like Koppolu Ring Road and Singarakonda with real future utility.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-[#0a4ba6]/10 text-[#0a4ba6] flex items-center justify-center font-bold">03</div>
-              <h3 className="text-base font-bold text-slate-900">Immediate Registration</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                No delayed possession promises. Immediate spot registration assistance with direct government record transfer.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-[#0a4ba6]/10 text-[#0a4ba6] flex items-center justify-center font-bold">04</div>
-              <h3 className="text-base font-bold text-slate-900">Lifelong Client Bond</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Our relationship continues long after registration with boundary maintenance, fencing, and resale advisory.
-              </p>
+            <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-1 shadow-2xs">
+              <div className="flex items-center gap-1.5 text-[#0a4ba6] font-bold text-xs">
+                <Building className="w-3.5 h-3.5 text-[#0a4ba6]" />
+                <span>City Consultation Office</span>
+              </div>
+              <p className="text-xs font-bold text-slate-900">32-1-28 Venugopalaswami Street, Ongole</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Office & Address Details */}
-      <section className="py-16 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-              <div className="flex items-center gap-2 text-[#0a4ba6] font-bold text-sm">
-                <MapPin className="w-4 h-4 text-[#ea511c]" />
-                <span>Primary Business Office</span>
-              </div>
-              <p className="text-sm font-semibold text-slate-800">Koppolu, Ongole</p>
-              <p className="text-xs text-slate-500">Andhra Pradesh, India</p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-              <div className="flex items-center gap-2 text-[#0a4ba6] font-bold text-sm">
-                <Building className="w-4 h-4 text-[#0a4ba6]" />
-                <span>Founder Residence / City Office</span>
-              </div>
-              <p className="text-sm font-semibold text-slate-800">32-1-28 Venugopalaswami Street</p>
-              <p className="text-xs text-slate-500">Near Venugopalaswami Temple, Ongole, Andhra Pradesh</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <FinalCTA />
       <Footer />
     </main>
   );

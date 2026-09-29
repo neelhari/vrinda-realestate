@@ -52,36 +52,37 @@ export default function WhyVrinda() {
           </p>
         </div>
 
-        {/* Minimalist Architectural Stat Grid with Hairline Dividers */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-200">
+        {/* 2-Column Minimalist Stat Grid on Mobile / 4-Column on Desktop */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           {trustPoints.map((item, index) => (
             <motion.div
               key={item.label}
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-              className={`py-6 md:py-0 ${index === 0 ? 'md:pr-6' : index === trustPoints.length - 1 ? 'md:pl-6' : 'md:px-6'} space-y-3 group`}
+              transition={{ duration: 0.4, delay: index * 0.08 }}
+              className="p-4 sm:p-5 rounded-2xl bg-[#f8fafc] border border-slate-200/80 shadow-2xs hover:border-[#0a4ba6]/40 hover:shadow-xs transition-all flex flex-col justify-between group"
             >
-              <div className="flex items-baseline justify-between">
-                <span className="text-3xl sm:text-4xl font-serif font-bold text-[#0a4ba6] tracking-tight group-hover:text-[#ea511c] transition-colors">
-                  {item.metric}
-                </span>
-                <span className="text-[10px] font-mono text-slate-400">0{index + 1}</span>
-              </div>
+              <div className="space-y-2">
+                <div className="flex items-baseline justify-between">
+                  <span className="text-2xl sm:text-4xl font-serif font-bold text-[#0a4ba6] tracking-tight group-hover:text-[#ea511c] transition-colors">
+                    {item.metric}
+                  </span>
+                  <span className="text-[10px] font-mono text-slate-400">0{index + 1}</span>
+                </div>
 
-              <div className="space-y-1.5">
-                <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">
+                <h3 className="text-xs sm:text-base font-bold text-slate-900 tracking-tight leading-snug">
                   {item.label}
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed font-normal">
+
+                <p className="text-[11px] sm:text-xs text-slate-500 leading-normal hidden sm:block">
                   {item.summary}
                 </p>
               </div>
 
-              <div className="pt-1 flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700">
-                <Check className="w-3.5 h-3.5 shrink-0" />
-                <span>{item.highlight}</span>
+              <div className="pt-2 sm:pt-3 mt-2 border-t border-slate-200/60 flex items-center gap-1 text-[10px] sm:text-[11px] font-semibold text-emerald-700">
+                <Check className="w-3 h-3 shrink-0" />
+                <span className="truncate">{item.highlight}</span>
               </div>
             </motion.div>
           ))}

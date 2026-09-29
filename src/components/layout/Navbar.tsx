@@ -9,25 +9,8 @@ import { WhatsAppIcon } from '@/components/icons/SocialIcons';
 import { buildWhatsAppUrl, buildPhoneUrl } from '@/lib/utils';
 
 export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-
-  const isHome = pathname === '/';
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 60) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    // Check initial state
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // Close mobile drawer on route change
   useEffect(() => {
@@ -39,24 +22,14 @@ export default function Navbar() {
     { name: 'Properties', href: '/properties' },
     { name: 'Plots', href: '/plots' },
     { name: 'Villas & Houses', href: '/villas' },
-    { name: 'Services', href: '/services' },
     { name: 'About', href: '/about' },
     { name: 'Gallery', href: '/gallery' },
     { name: 'Contact', href: '/contact' },
   ];
 
-  // On home page, header appears smoothly only after scrolling down
-  const showHeader = !isHome || isScrolled;
-
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
-          showHeader
-            ? 'translate-y-0 opacity-100 bg-white/95 backdrop-blur-md shadow-md py-2.5 sm:py-3 border-b border-slate-100'
-            : '-translate-y-full opacity-0 pointer-events-none'
-        }`}
-      >
+      <header className="sticky top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-xs py-2.5 sm:py-3 border-b border-slate-100 transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* Brand Logo with exact aspect ratio and crisp responsive sizing */}

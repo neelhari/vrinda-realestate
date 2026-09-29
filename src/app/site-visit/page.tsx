@@ -1,5 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
+import Image from 'next/image';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import SiteVisitClient from './SiteVisitClient';
@@ -20,20 +21,25 @@ export default function SiteVisitPage() {
     <main className="min-h-screen flex flex-col bg-white">
       <Navbar />
 
-      {/* Header */}
-      <section className="pt-32 pb-14 bg-[#0b1329] text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0b1329] via-[#073575]/40 to-[#0b1329]" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 text-[#ea511c] text-xs font-semibold uppercase tracking-wider">
-            <Calendar className="w-3.5 h-3.5" />
-            <span>COMPLIMENTARY SITE TOUR</span>
+      {/* 100% Bright, Pristine Site Visit Photo Banner with Left-Aligned Title & Description Inside (Zero color shade) */}
+      <section className="relative w-full h-56 sm:h-72 lg:h-80 flex items-end pb-6 sm:pb-8 overflow-hidden bg-slate-900">
+        <Image
+          src="/images/category-plots.jpg"
+          alt="Schedule a Guided Site Visit"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="max-w-2xl text-left space-y-1 sm:space-y-2">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-serif font-bold text-white tracking-tight [text-shadow:_0_3px_12px_rgba(0,0,0,0.9)]">
+              Book a Site Visit
+            </h1>
+            <p className="text-xs sm:text-sm lg:text-base text-white leading-relaxed font-medium [text-shadow:_0_2px_8px_rgba(0,0,0,0.85)] max-w-xl">
+              Schedule a complimentary on-ground layout tour to inspect physical boundary stones and surrounding infrastructure with our team.
+            </p>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-serif font-bold tracking-tight">
-            Schedule a Guided Site Visit
-          </h1>
-          <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto font-light">
-            Walk the actual property boundaries, review layout blueprints, and assess neighborhood connectivity in person with our specialists.
-          </p>
         </div>
       </section>
 
