@@ -56,9 +56,7 @@ export default function PropertiesAdminClient({ initialProperties }: PropertiesA
   const [dimensions, setDimensions] = useState('33 x 45.5 ft');
   const [facing, setFacing] = useState('East Facing');
   const [description, setDescription] = useState('');
-  const [videoUrl, setVideoUrl] = useState('');
-  const [floorPlanUrl, setFloorPlanUrl] = useState('');
-  const [imageUrl, setImageUrl] = useState('/images/category-plots.jpg');
+  const [images, setImages] = useState<string[]>(['/images/category-plots.jpg']);
   const [dtcpApproved, setDtcpApproved] = useState(true);
   const [possessionDate, setPossessionDate] = useState('Immediate Registration');
 
@@ -79,9 +77,7 @@ export default function PropertiesAdminClient({ initialProperties }: PropertiesA
     setDimensions('33 x 45.5 ft');
     setFacing('East Facing');
     setDescription('Meticulously planned gated residential plotted layout with 40-foot wide BT roads, underground drainage, avenue plantation, and instant Sub-Registrar registration with clear titles in Koppolu.');
-    setVideoUrl('');
-    setFloorPlanUrl('');
-    setImageUrl('/images/category-plots.jpg');
+    setImages(['/images/category-plots.jpg']);
     setDtcpApproved(true);
     setPossessionDate('Immediate Registration');
     setIsModalOpen(true);
@@ -108,40 +104,61 @@ export default function PropertiesAdminClient({ initialProperties }: PropertiesA
     setDimensions(prop.dimensions || '');
     setFacing(prop.facing || '');
     setDescription(prop.description || '');
-    setVideoUrl(prop.videoUrl || '');
-    setFloorPlanUrl(prop.floorPlanUrl || '');
-    setImageUrl(prop.images && prop.images[0] ? prop.images[0] : '/images/category-plots.jpg');
+    setImages(prop.images && prop.images.length > 0 ? prop.images : ['/images/category-plots.jpg']);
     setDtcpApproved(Boolean(prop.dtcpApproved));
     setPossessionDate(prop.possessionDate || 'Immediate');
     setIsModalOpen(true);
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     setIsUploading(true);
     try {
-      const formData = new FormData();
-      formData.append('file', file);
+      const uploadedUrls: string[] = [];
 
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
+      for (let i = 0; i < files.length; i++) {
+        const formData = new FormData();
+        formData.append('file', files[i]);
+        formData.append('folder', 'vrinda_properties');
 
-      if (res.ok) {
-        const data = await res.json();
-        setImageUrl(data.url);
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.url) {
+            uploadedUrls.push(data.url);
+          }
+        }
+      }
+
+      if (uploadedUrls.length > 0) {
+        setImages((prev) => {
+          // Remove default mock image if this is the first real upload
+          const filtered = prev.filter((img) => !img.startsWith('/images/category-'));
+          return [...filtered, ...uploadedUrls];
+        });
       } else {
         alert('Upload failed. Please try again.');
       }
     } catch (err) {
       console.error(err);
-      alert('Error uploading file');
+      alert('Error uploading photos');
     } finally {
       setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
+  };
+
+  const handleRemoveImage = (indexToRemove: number) => {
+    setImages((prev) => {
+      const updated = prev.filter((_, idx) => idx !== indexToRemove);
+      return updated.length > 0 ? updated : ['/images/category-plots.jpg'];
+    });
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -168,9 +185,7 @@ export default function PropertiesAdminClient({ initialProperties }: PropertiesA
       dimensions,
       facing,
       description,
-      images: [imageUrl],
-      videoUrl: videoUrl.trim() || undefined,
-      floorPlanUrl: floorPlanUrl.trim() || undefined,
+      images: images.length > 0 ? images : ['/images/category-plots.jpg'],
       dtcpApproved,
       reraApproved: dtcpApproved,
       possessionDate
@@ -682,108 +697,88 @@ export default function PropertiesAdminClient({ initialProperties }: PropertiesA
                 </div>
               </div>
 
-              {/* 6. Media: Real Photo Upload, YouTube Video & Layout Plan */}
+              {/* 6. Media: Multi-Photo Upload to Cloudinary */}
               <div className="space-y-4 p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                <p className="text-xs font-bold text-slate-900 uppercase">Media & Layout Documents</p>
-                
-                {/* Real File Upload + Preview */}
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-700 uppercase mb-2">
-                    Property Photo (Upload File or Select Preset)
-                  </label>
-
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                    {/* Live Preview Thumbnail */}
-                    <div className="relative h-24 w-32 rounded-xl overflow-hidden bg-slate-200 border-2 border-slate-300 shrink-0">
-                      {imageUrl ? (
-                        <Image
-                          src={imageUrl}
-                          alt="Cover Preview"
-                          fill
-                          sizes="128px"
-                          className="object-cover"
-                        />
-                      ) : (
-                        <div className="flex items-center justify-center h-full text-slate-400">
-                          <ImageIcon className="w-8 h-8" />
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="space-y-2 grow w-full">
-                      {/* Hidden File Input */}
-                      <input
-                        type="file"
-                        ref={fileInputRef}
-                        onChange={handleFileUpload}
-                        accept="image/*"
-                        className="hidden"
-                      />
-
-                      {/* Upload Button */}
-                      <button
-                        type="button"
-                        disabled={isUploading}
-                        onClick={() => fileInputRef.current?.click()}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 rounded-xl text-xs font-bold shadow-2xs transition-all cursor-pointer"
-                      >
-                        {isUploading ? (
-                          <>
-                            <Loader2 className="w-4 h-4 animate-spin text-[#0a4ba6]" />
-                            <span>Uploading Photo...</span>
-                          </>
-                        ) : (
-                          <>
-                            <Upload className="w-4 h-4 text-[#0a4ba6]" />
-                            <span>Upload Image from Phone/PC</span>
-                          </>
-                        )}
-                      </button>
-
-                      {/* Stock Preset Selector */}
-                      <select
-                        value={imageUrl}
-                        onChange={(e) => setImageUrl(e.target.value)}
-                        className="w-full px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-700 focus:outline-hidden"
-                      >
-                        <option value={imageUrl}>Selected Image ({imageUrl})</option>
-                        <option value="/images/category-plots.jpg">Plots Preset (/images/category-plots.jpg)</option>
-                        <option value="/images/category-villas.jpg">Luxury Villa Preset (/images/category-villas.jpg)</option>
-                        <option value="/images/category-houses.jpg">Independent House Preset (/images/category-houses.jpg)</option>
-                        <option value="/images/hero-luxury-villa.jpg">Hero Villa Preset (/images/hero-luxury-villa.jpg)</option>
-                      </select>
-                    </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-bold text-slate-900 uppercase">Property Photos (Cloudinary CDN)</p>
+                    <p className="text-[11px] text-slate-500 mt-0.5">
+                      Upload multiple high-resolution photos. First photo will be the main cover image.
+                    </p>
                   </div>
+                  
+                  {/* Upload More Button */}
+                  <button
+                    type="button"
+                    disabled={isUploading}
+                    onClick={() => fileInputRef.current?.click()}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0a4ba6] hover:bg-[#073575] text-white rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer disabled:opacity-50"
+                  >
+                    {isUploading ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>Uploading...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-3.5 h-3.5" />
+                        <span>+ Add Photos</span>
+                      </>
+                    )}
+                  </button>
                 </div>
 
-                {/* YouTube Link & Layout Plan Link */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-200/80">
-                  <div>
-                    <label className="block text-[11px] font-bold text-slate-600 uppercase mb-1 flex items-center gap-1">
-                      <Video className="w-3.5 h-3.5 text-red-600" />
-                      <span>YouTube Drone / Video Link</span>
-                    </label>
-                    <input
-                      type="url"
-                      value={videoUrl}
-                      onChange={(e) => setVideoUrl(e.target.value)}
-                      placeholder="https://www.youtube.com/watch?v=..."
-                      className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 focus:outline-hidden"
-                    />
-                  </div>
+                {/* Hidden File Input supporting multiple files */}
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileUpload}
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                />
 
-                  <div>
-                    <label className="block text-[11px] font-bold text-slate-600 uppercase mb-1 flex items-center gap-1">
-                      <FileText className="w-3.5 h-3.5 text-[#0a4ba6]" />
-                      <span>Master Layout Plan / PDF Link</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={floorPlanUrl}
-                      onChange={(e) => setFloorPlanUrl(e.target.value)}
-                      placeholder="e.g. Link to Layout Sketch or Brochure PDF"
-                      className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 focus:outline-hidden"
-                    />
+                {/* Multi-Photo Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pt-2">
+                  {images.map((imgUrl, idx) => (
+                    <div
+                      key={idx}
+                      className="group relative h-28 rounded-xl overflow-hidden bg-slate-200 border-2 border-slate-200 shadow-2xs flex flex-col justify-between"
+                    >
+                      <Image
+                        src={imgUrl}
+                        alt={`Property photo ${idx + 1}`}
+                        fill
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                        className="object-cover"
+                      />
+
+                      {/* Cover Badge on First Photo */}
+                      {idx === 0 && (
+                        <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-md bg-[#0a4ba6] text-white text-[9px] font-bold uppercase tracking-wider shadow-xs">
+                          Cover Photo
+                        </span>
+                      )}
+
+                      {/* Delete Photo Button */}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveImage(idx)}
+                        className="absolute top-1.5 right-1.5 p-1 rounded-md bg-white/90 text-red-600 hover:bg-red-600 hover:text-white shadow-xs opacity-90 transition-all cursor-pointer"
+                        title="Remove photo"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+
+                  {/* Add Photo Tile */}
+                  <div
+                    onClick={() => fileInputRef.current?.click()}
+                    className="h-28 rounded-xl border-2 border-dashed border-slate-300 hover:border-[#0a4ba6] bg-white hover:bg-blue-50/40 flex flex-col items-center justify-center gap-1.5 text-slate-500 hover:text-[#0a4ba6] transition-all cursor-pointer p-2 text-center"
+                  >
+                    <Plus className="w-5 h-5" />
+                    <span className="text-[11px] font-semibold">Upload Photo</span>
                   </div>
                 </div>
               </div>
