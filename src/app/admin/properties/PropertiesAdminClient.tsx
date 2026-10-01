@@ -133,6 +133,9 @@ export default function PropertiesAdminClient({ initialProperties }: PropertiesA
           if (data.url) {
             uploadedUrls.push(data.url);
           }
+        } else {
+          const data = await res.json().catch(() => ({}));
+          alert(data.error || 'Upload failed. Please check Cloudinary configuration.');
         }
       }
 
@@ -142,12 +145,10 @@ export default function PropertiesAdminClient({ initialProperties }: PropertiesA
           const filtered = prev.filter((img) => !img.startsWith('/images/category-'));
           return [...filtered, ...uploadedUrls];
         });
-      } else {
-        alert('Upload failed. Please try again.');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert('Error uploading photos');
+      alert(err.message || 'Error uploading photos');
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';

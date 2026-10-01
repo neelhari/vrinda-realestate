@@ -37,11 +37,12 @@ export default function GalleryAdminClient({ initialGallery }: GalleryAdminClien
         const data = await res.json();
         setImageUrl(data.url);
       } else {
-        alert('Upload failed. Please try again.');
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || 'Upload failed. Please check Cloudinary configuration.');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert('Error uploading file');
+      alert(err.message || 'Error uploading file');
     } finally {
       setIsUploading(false);
     }

@@ -1,13 +1,11 @@
 import { NextResponse } from 'next/server';
 import { getAdminSession } from '@/lib/auth';
 import { uploadToCloudinary } from '@/lib/cloudinary';
-import { writeFile } from 'fs/promises';
-import path from 'path';
 
 export async function POST(req: Request) {
   const session = await getAdminSession();
   if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'Session expired or unauthorized. Please log into the admin panel again.' }, { status: 401 });
   }
 
   try {
@@ -27,37 +25,17 @@ export async function POST(req: Request) {
     const isVideo = mimeType.startsWith('video/');
     const resourceType = isVideo ? 'video' : 'image';
 
-    // 1. Primary: Upload to Cloudinary
-    try {
-      const cloudinaryResult = await uploadToCloudinary(buffer, folder, resourceType);
-      return NextResponse.json({
-        success: true,
-        url: cloudinaryResult.secure_url || cloudinaryResult.url,
-        public_id: cloudinaryResult.public_id,
-        resource_type: cloudinaryResult.resource_type || resourceType,
-      });
-    } catch (cloudErr) {
-      console.error('Cloudinary upload failed, falling back to local storage:', cloudErr);
-      
-      // 2. Fallback to local storage
-      const ext = path.extname(file.name) || (isVideo ? '.mp4' : '.jpg');
-      const cleanName = file.name.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 20);
-      const filename = `upload_${Date.now()}_${cleanName}${ext}`;
-      
-      const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-      const filePath = path.join(uploadDir, filename);
-
-      await writeFile(filePath, buffer);
-
-      const publicUrl = `/uploads/${filename}`;
-      return NextResponse.json({ 
-        success: true, 
-        url: publicUrl,
-        fallback: true 
-      });
-    }
+    const cloudinaryResult = await uploadToCloudinary(buffer, folder, resourceType);
+    return NextResponse.json({
+      success: true,
+      url: cloudinaryResult.secure_url || cloudinaryResult.url,
+      public_id: cloudinaryResult.public_id,
+      resource_type: cloudinaryResult.resource_type || resourceType,
+    });
   } catch (err: any) {
     console.error('Upload handler error:', err);
-    return NextResponse.json({ error: err.message || 'File upload failed' }, { status: 500 });
+    return NextResponse.json({ 
+      error: err.message || 'Cloudinary upload failed. Check Vercel environment variables.' 
+    }, { status: 500 });
   }
 }
