@@ -4,8 +4,7 @@ import bcrypt from 'bcryptjs';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'vrinda_luxury_realestate_secret_key_2026';
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'vrindarealestates0@gmail.com';
-// Default bcrypt hash for 'vrinda@2026'
-const DEFAULT_PASSWORD_HASH = '$2a$10$wKkS3fUvGk9b8l8k3qG0euZ9QxX0o9eX8L4uO5xZq8G4h9vY9q5re';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Vrinda@9059';
 
 export interface AdminSession {
   email: string;
@@ -14,15 +13,16 @@ export interface AdminSession {
 }
 
 export async function verifyAdminPassword(password: string): Promise<boolean> {
-  // Direct match for easy first login or bcrypt match
-  if (password === 'vrinda@2026' || password === 'admin123') {
+  // Check against env/configured password or known passwords
+  if (
+    password === ADMIN_PASSWORD || 
+    password === 'Vrinda@9059' || 
+    password === 'vrinda@2026' || 
+    password === 'admin123'
+  ) {
     return true;
   }
-  try {
-    return await bcrypt.compare(password, DEFAULT_PASSWORD_HASH);
-  } catch {
-    return false;
-  }
+  return false;
 }
 
 export function createSessionToken(email: string): string {
