@@ -63,26 +63,26 @@ function mapPropertyToDb(p: Property): any {
     title: p.title,
     type: p.type,
     status: p.status,
-    featured: p.featured,
+    featured: Boolean(p.featured),
     location: p.location,
     address: p.address,
-    price: p.price,
-    price_label: p.priceLabel,
-    area: p.area,
-    area_unit: p.areaUnit,
-    dimensions: p.dimensions,
-    facing: p.facing,
-    bedrooms: p.bedrooms,
-    bathrooms: p.bathrooms,
-    description: p.description,
-    highlights: p.highlights || [],
-    amenities: p.amenities || [],
-    images: p.images || [],
-    floor_plan_url: p.floorPlanUrl,
-    video_url: p.videoUrl,
-    dtcp_approved: p.dtcpApproved,
-    rera_approved: p.reraApproved,
-    possession_date: p.possessionDate,
+    price: Number(p.price) || 0,
+    price_label: p.priceLabel || 'Contact for Price',
+    area: Number(p.area) || 0,
+    area_unit: p.areaUnit || 'sq.yards',
+    dimensions: p.dimensions || null,
+    facing: p.facing || null,
+    bedrooms: p.bedrooms ? Number(p.bedrooms) : null,
+    bathrooms: p.bathrooms ? Number(p.bathrooms) : null,
+    description: p.description || '',
+    highlights: Array.isArray(p.highlights) ? p.highlights : [],
+    amenities: Array.isArray(p.amenities) ? p.amenities : [],
+    images: Array.isArray(p.images) && p.images.length > 0 ? p.images : ['/images/category-plots.jpg'],
+    floor_plan_url: p.floorPlanUrl || null,
+    video_url: p.videoUrl || null,
+    dtcp_approved: Boolean(p.dtcpApproved),
+    rera_approved: Boolean(p.reraApproved),
+    possession_date: p.possessionDate || null,
     updated_at: new Date().toISOString()
   };
 }
@@ -265,16 +265,25 @@ export const db = {
 
     try {
       const dbRow = mapPropertyToDb(property);
-      await supabaseAdmin.from('properties').upsert(dbRow);
-    } catch (err) {
+      const { error } = await supabaseAdmin.from('properties').upsert(dbRow);
+      if (error) {
+        console.error('Supabase saveProperty error:', error);
+        throw new Error(error.message || 'Supabase rejected property save');
+      }
+    } catch (err: any) {
       console.error('Supabase saveProperty error:', err);
+      throw err;
     }
     return property;
   },
   deleteProperty: async (id: string): Promise<boolean> => {
     cache.properties = cache.properties.filter((p) => p.id !== id);
     try {
-      await supabaseAdmin.from('properties').delete().eq('id', id);
+      const { error } = await supabaseAdmin.from('properties').delete().eq('id', id);
+      if (error) {
+        console.error('Supabase deleteProperty error:', error);
+        throw new Error(error.message);
+      }
       return true;
     } catch (err) {
       console.error('Supabase deleteProperty error:', err);

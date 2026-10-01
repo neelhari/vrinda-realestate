@@ -214,6 +214,9 @@ export default function PropertiesAdminClient({ initialProperties }: PropertiesA
             prev.map((p) => (p.id === editingProperty.id ? data.property : p))
           );
           setIsModalOpen(false);
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          alert(errData.error || 'Failed to update property in database');
         }
       } else {
         const res = await fetch('/api/properties', {
@@ -225,10 +228,14 @@ export default function PropertiesAdminClient({ initialProperties }: PropertiesA
           const data = await res.json();
           setProperties((prev) => [data.property, ...prev]);
           setIsModalOpen(false);
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          alert(errData.error || 'Failed to save property in database');
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      alert(err.message || 'Error communicating with server');
     } finally {
       setIsSaving(false);
     }
