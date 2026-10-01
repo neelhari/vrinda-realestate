@@ -28,9 +28,34 @@ export default function AdminNavShell({ user, children }: AdminNavShellProps) {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // If session is missing and not on login page, redirect to login
+  React.useEffect(() => {
+    if (!user && pathname !== '/admin/login') {
+      router.push('/admin/login');
+    }
+  }, [user, pathname, router]);
+
   // If on login page, don't show the dashboard shell
   if (pathname === '/admin/login') {
     return <>{children}</>;
+  }
+
+  // If not logged in, show a clean prompt while redirecting
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-[#0b1329] flex flex-col items-center justify-center p-4 text-white">
+        <div className="p-6 bg-white/10 rounded-2xl backdrop-blur-xs text-center space-y-3 max-w-sm">
+          <p className="text-sm font-semibold">Admin Authentication Required</p>
+          <p className="text-xs text-slate-300">Redirecting to login page...</p>
+          <a
+            href="/admin/login"
+            className="inline-block px-4 py-2 bg-[#0a4ba6] text-white rounded-xl text-xs font-bold"
+          >
+            Go to Login
+          </a>
+        </div>
+      </div>
+    );
   }
 
   const navItems = [
