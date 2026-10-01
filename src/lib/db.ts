@@ -318,7 +318,7 @@ export const db = {
     };
     cache.leads.unshift(newLead);
     try {
-      await supabaseAdmin.from('leads').insert({
+      const { error } = await supabaseAdmin.from('leads').insert({
         id: newLead.id,
         name: newLead.name,
         phone: newLead.phone,
@@ -332,8 +332,13 @@ export const db = {
         status: newLead.status,
         notes: newLead.notes
       });
+      if (error) {
+        console.error('Supabase addLead error:', error);
+        throw new Error(error.message);
+      }
     } catch (err) {
       console.error('Supabase addLead error:', err);
+      throw err;
     }
     return newLead;
   },
@@ -346,9 +351,11 @@ export const db = {
         if (updates.status) payload.status = updates.status;
         if (updates.notes !== undefined) payload.notes = updates.notes;
         payload.updated_at = new Date().toISOString();
-        await supabaseAdmin.from('leads').update(payload).eq('id', id);
+        const { error } = await supabaseAdmin.from('leads').update(payload).eq('id', id);
+        if (error) throw new Error(error.message);
       } catch (err) {
         console.error('Supabase updateLead error:', err);
+        throw err;
       }
       return cache.leads[idx];
     }
@@ -357,11 +364,12 @@ export const db = {
   deleteLead: async (id: string): Promise<boolean> => {
     cache.leads = cache.leads.filter((l) => l.id !== id);
     try {
-      await supabaseAdmin.from('leads').delete().eq('id', id);
+      const { error } = await supabaseAdmin.from('leads').delete().eq('id', id);
+      if (error) throw new Error(error.message);
       return true;
     } catch (err) {
       console.error('Supabase deleteLead error:', err);
-      return false;
+      throw err;
     }
   },
 
@@ -391,7 +399,7 @@ export const db = {
     };
     cache.siteVisits.unshift(newVisit);
     try {
-      await supabaseAdmin.from('site_visits').insert({
+      const { error } = await supabaseAdmin.from('site_visits').insert({
         id: newVisit.id,
         name: newVisit.name,
         phone: newVisit.phone,
@@ -407,8 +415,10 @@ export const db = {
         status: newVisit.status,
         notes: newVisit.notes
       });
+      if (error) throw new Error(error.message);
     } catch (err) {
       console.error('Supabase addSiteVisit error:', err);
+      throw err;
     }
     return newVisit;
   },
@@ -420,9 +430,11 @@ export const db = {
         const payload: any = {};
         if (updates.status) payload.status = updates.status;
         if (updates.notes !== undefined) payload.notes = updates.notes;
-        await supabaseAdmin.from('site_visits').update(payload).eq('id', id);
+        const { error } = await supabaseAdmin.from('site_visits').update(payload).eq('id', id);
+        if (error) throw new Error(error.message);
       } catch (err) {
         console.error('Supabase updateSiteVisit error:', err);
+        throw err;
       }
       return cache.siteVisits[idx];
     }
@@ -431,11 +443,12 @@ export const db = {
   deleteSiteVisit: async (id: string): Promise<boolean> => {
     cache.siteVisits = cache.siteVisits.filter((v) => v.id !== id);
     try {
-      await supabaseAdmin.from('site_visits').delete().eq('id', id);
+      const { error } = await supabaseAdmin.from('site_visits').delete().eq('id', id);
+      if (error) throw new Error(error.message);
       return true;
     } catch (err) {
       console.error('Supabase deleteSiteVisit error:', err);
-      return false;
+      throw err;
     }
   },
 
@@ -465,7 +478,7 @@ export const db = {
       cache.testimonials.unshift(item);
     }
     try {
-      await supabaseAdmin.from('testimonials').upsert({
+      const { error } = await supabaseAdmin.from('testimonials').upsert({
         id: item.id,
         name: item.name,
         location: item.location,
@@ -476,19 +489,22 @@ export const db = {
         avatar_url: item.avatarUrl,
         is_published: item.isPublished
       });
+      if (error) throw new Error(error.message);
     } catch (err) {
       console.error('Supabase saveTestimonial error:', err);
+      throw err;
     }
     return item;
   },
   deleteTestimonial: async (id: string): Promise<boolean> => {
     cache.testimonials = cache.testimonials.filter((t) => t.id !== id);
     try {
-      await supabaseAdmin.from('testimonials').delete().eq('id', id);
+      const { error } = await supabaseAdmin.from('testimonials').delete().eq('id', id);
+      if (error) throw new Error(error.message);
       return true;
     } catch (err) {
       console.error('Supabase deleteTestimonial error:', err);
-      return false;
+      throw err;
     }
   },
 
@@ -517,7 +533,7 @@ export const db = {
       cache.locations.push(item);
     }
     try {
-      await supabaseAdmin.from('locations').upsert({
+      const { error } = await supabaseAdmin.from('locations').upsert({
         id: item.id,
         name: item.name,
         tagline: item.tagline,
@@ -526,19 +542,22 @@ export const db = {
         image_url: item.imageUrl,
         is_active: item.isActive
       });
+      if (error) throw new Error(error.message);
     } catch (err) {
       console.error('Supabase saveLocation error:', err);
+      throw err;
     }
     return item;
   },
   deleteLocation: async (id: string): Promise<boolean> => {
     cache.locations = cache.locations.filter((l) => l.id !== id);
     try {
-      await supabaseAdmin.from('locations').delete().eq('id', id);
+      const { error } = await supabaseAdmin.from('locations').delete().eq('id', id);
+      if (error) throw new Error(error.message);
       return true;
     } catch (err) {
       console.error('Supabase deleteLocation error:', err);
-      return false;
+      throw err;
     }
   },
 
@@ -568,7 +587,7 @@ export const db = {
       cache.gallery.unshift(item);
     }
     try {
-      await supabaseAdmin.from('gallery').upsert({
+      const { error } = await supabaseAdmin.from('gallery').upsert({
         id: item.id,
         title: item.title,
         category: item.category,
@@ -576,19 +595,22 @@ export const db = {
         caption: item.caption,
         featured: item.featured
       });
+      if (error) throw new Error(error.message);
     } catch (err) {
       console.error('Supabase saveGalleryItem error:', err);
+      throw err;
     }
     return item;
   },
   deleteGalleryItem: async (id: string): Promise<boolean> => {
     cache.gallery = cache.gallery.filter((g) => g.id !== id);
     try {
-      await supabaseAdmin.from('gallery').delete().eq('id', id);
+      const { error } = await supabaseAdmin.from('gallery').delete().eq('id', id);
+      if (error) throw new Error(error.message);
       return true;
     } catch (err) {
       console.error('Supabase deleteGalleryItem error:', err);
-      return false;
+      throw err;
     }
   }
 };
