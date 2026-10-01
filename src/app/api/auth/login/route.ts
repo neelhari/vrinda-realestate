@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { verifyAdminPassword, createSessionToken } from '@/lib/auth';
+import { verifyAdminCredentials, createSessionToken } from '@/lib/auth';
 import { cookies } from 'next/headers';
 
 export async function POST(req: Request) {
@@ -10,12 +10,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Password is required' }, { status: 400 });
     }
 
-    const isValid = await verifyAdminPassword(password);
+    const adminEmail = (email || 'vrindarealestates0@gmail.com').trim();
+    const isValid = await verifyAdminCredentials(adminEmail, password);
     if (!isValid) {
       return NextResponse.json({ error: 'Invalid admin credentials' }, { status: 401 });
     }
 
-    const token = createSessionToken(email || 'vrindarealestates0@gmail.com');
+    const token = createSessionToken(adminEmail);
     const cookieStore = await cookies();
     cookieStore.set('vrinda_admin_token', token, {
       httpOnly: true,
@@ -28,7 +29,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       success: true,
       user: {
-        email: email || 'vrindarealestates0@gmail.com',
+        email: adminEmail,
         name: 'Bejapur Ayyappa Sai',
         role: 'admin'
       }

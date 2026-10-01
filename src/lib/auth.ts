@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
+import { supabase } from './supabase';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'vrinda_luxury_realestate_secret_key_2026';
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'vrindarealestates0@gmail.com';
@@ -12,8 +12,23 @@ export interface AdminSession {
   role: string;
 }
 
-export async function verifyAdminPassword(password: string): Promise<boolean> {
-  // Check against env/configured password or known passwords
+export async function verifyAdminCredentials(email: string, password: string): Promise<boolean> {
+  // 1. Verify against Supabase Auth (for users created in Supabase Dashboard)
+  try {
+    if (supabase && email && password) {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password: password,
+      });
+      if (data?.user && !error) {
+        return true;
+      }
+    }
+  } catch (err) {
+    console.warn('Supabase auth fallback check:', err);
+  }
+
+  // 2. Fallback to direct password check
   if (
     password === ADMIN_PASSWORD || 
     password === 'Vrinda@9059' || 
@@ -22,6 +37,7 @@ export async function verifyAdminPassword(password: string): Promise<boolean> {
   ) {
     return true;
   }
+
   return false;
 }
 

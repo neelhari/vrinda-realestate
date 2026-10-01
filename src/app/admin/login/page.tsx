@@ -98,7 +98,6 @@ export default function AdminLoginPage() {
                 className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-hidden focus:border-[#0a4ba6]"
               />
             </div>
-            <p className="text-[11px] text-slate-400 mt-1">Default access: <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-700 font-mono">vrinda@2026</code></p>
           </div>
 
           <button
