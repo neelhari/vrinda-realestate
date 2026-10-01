@@ -155,6 +155,15 @@ export default function PropertiesAdminClient({ initialProperties }: PropertiesA
     }
   };
 
+  const handleSetCoverImage = (indexToCover: number) => {
+    if (indexToCover === 0) return;
+    setImages((prev) => {
+      const selected = prev[indexToCover];
+      const rest = prev.filter((_, idx) => idx !== indexToCover);
+      return [selected, ...rest];
+    });
+  };
+
   const handleRemoveImage = (indexToRemove: number) => {
     setImages((prev) => {
       const updated = prev.filter((_, idx) => idx !== indexToRemove);
@@ -739,39 +748,58 @@ export default function PropertiesAdminClient({ initialProperties }: PropertiesA
                   className="hidden"
                 />
 
-                {/* Multi-Photo Grid */}
+                {/* Multi-Photo Grid with Tap-to-Set Cover */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pt-2">
-                  {images.map((imgUrl, idx) => (
-                    <div
-                      key={idx}
-                      className="group relative h-28 rounded-xl overflow-hidden bg-slate-200 border-2 border-slate-200 shadow-2xs flex flex-col justify-between"
-                    >
-                      <Image
-                        src={imgUrl}
-                        alt={`Property photo ${idx + 1}`}
-                        fill
-                        sizes="(max-width: 768px) 50vw, 25vw"
-                        className="object-cover"
-                      />
-
-                      {/* Cover Badge on First Photo */}
-                      {idx === 0 && (
-                        <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-md bg-[#0a4ba6] text-white text-[9px] font-bold uppercase tracking-wider shadow-xs">
-                          Cover Photo
-                        </span>
-                      )}
-
-                      {/* Delete Photo Button */}
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveImage(idx)}
-                        className="absolute top-1.5 right-1.5 p-1 rounded-md bg-white/90 text-red-600 hover:bg-red-600 hover:text-white shadow-xs opacity-90 transition-all cursor-pointer"
-                        title="Remove photo"
+                  {images.map((imgUrl, idx) => {
+                    const isCover = idx === 0;
+                    return (
+                      <div
+                        key={idx}
+                        onClick={() => handleSetCoverImage(idx)}
+                        className={`group relative h-28 rounded-xl overflow-hidden shadow-2xs flex flex-col justify-between transition-all duration-200 ${
+                          isCover
+                            ? 'border-2 border-[#0a4ba6] ring-3 ring-[#0a4ba6]/20 bg-blue-50 cursor-default'
+                            : 'border-2 border-slate-200 hover:border-[#0a4ba6] cursor-pointer hover:shadow-md hover:scale-[1.02]'
+                        }`}
+                        title={isCover ? 'Primary Cover Photo' : 'Click/Tap to make this the Cover Photo'}
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  ))}
+                        <Image
+                          src={imgUrl}
+                          alt={`Property photo ${idx + 1}`}
+                          fill
+                          sizes="(max-width: 768px) 50vw, 25vw"
+                          className="object-cover"
+                        />
+
+                        {/* Cover Status Badge */}
+                        <div className="relative z-10 p-1.5 flex items-start justify-between">
+                          {isCover ? (
+                            <span className="px-2 py-0.5 rounded-md bg-[#0a4ba6] text-white text-[9px] font-bold uppercase tracking-wider shadow-sm flex items-center gap-1">
+                              <Star className="w-2.5 h-2.5 fill-amber-300 text-amber-300" />
+                              Cover Photo
+                            </span>
+                          ) : (
+                            <span className="px-1.5 py-0.5 rounded-md bg-black/60 group-hover:bg-[#0a4ba6] text-white text-[9px] font-medium backdrop-blur-xs transition-colors shadow-xs">
+                              Tap to Set Cover
+                            </span>
+                          )}
+
+                          {/* Delete Photo Button */}
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveImage(idx);
+                            }}
+                            className="p-1 rounded-md bg-white/90 text-red-600 hover:bg-red-600 hover:text-white shadow-xs opacity-90 transition-all cursor-pointer"
+                            title="Remove photo"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
 
                   {/* Add Photo Tile */}
                   <div
