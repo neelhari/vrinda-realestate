@@ -9,7 +9,7 @@ export async function GET(req: Request) {
   const location = searchParams.get('location');
   const featured = searchParams.get('featured');
 
-  let properties = db.getProperties();
+  let properties = await db.fetchProperties();
 
   if (type && type !== 'all') {
     properties = properties.filter((p) => p.type === type);
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
     const slug = body.slug || title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
     const newProperty: Property = {
-      id: `prop-${Date.now()}`,
+      id: body.id || `prop-${Date.now()}`,
       slug,
       title,
       type,
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
       description: body.description || '',
       highlights: Array.isArray(body.highlights) ? body.highlights : (body.highlights ? body.highlights.split('\n').filter(Boolean) : []),
       amenities: Array.isArray(body.amenities) ? body.amenities : (body.amenities ? body.amenities.split('\n').filter(Boolean) : []),
-      images: Array.isArray(body.images) && body.images.length > 0 ? body.images : ['/images/hero-luxury-villa.jpg'],
+      images: Array.isArray(body.images) && body.images.length > 0 ? body.images : ['/images/category-plots.jpg'],
       floorPlanUrl: body.floorPlanUrl || '',
       videoUrl: body.videoUrl || '',
       dtcpApproved: Boolean(body.dtcpApproved),
@@ -75,7 +75,7 @@ export async function POST(req: Request) {
       updatedAt: new Date().toISOString()
     };
 
-    const saved = db.saveProperty(newProperty);
+    const saved = await db.saveProperty(newProperty);
     return NextResponse.json({ success: true, property: saved });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

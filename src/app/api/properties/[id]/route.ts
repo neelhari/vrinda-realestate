@@ -7,6 +7,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
+  await db.fetchProperties();
   const property = db.getPropertyById(id) || db.getPropertyBySlug(id);
 
   if (!property) {
@@ -28,16 +29,12 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await req.json();
-    const existing = db.getPropertyById(id);
+    const existing = db.getPropertyById(id) || db.getPropertyBySlug(id) || { id };
 
-    if (!existing) {
-      return NextResponse.json({ error: 'Property not found' }, { status: 404 });
-    }
-
-    const updated = db.saveProperty({
+    const updated = await db.saveProperty({
       ...existing,
       ...body,
-      id: existing.id,
+      id,
       updatedAt: new Date().toISOString()
     });
 
@@ -57,7 +54,7 @@ export async function DELETE(
   }
 
   const { id } = await params;
-  const deleted = db.deleteProperty(id);
+  const deleted = await db.deleteProperty(id);
 
   return NextResponse.json({ success: deleted });
 }

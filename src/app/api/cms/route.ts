@@ -3,7 +3,7 @@ import { db } from '@/lib/db';
 import { getAdminSession } from '@/lib/auth';
 
 export async function GET() {
-  const cms = db.getCMS();
+  const cms = await db.fetchCMS();
   return NextResponse.json({ success: true, cms });
 }
 
@@ -15,7 +15,7 @@ export async function PUT(req: Request) {
 
   try {
     const updates = await req.json();
-    const updated = db.updateCMS(updates);
+    const updated = await db.updateCMS(updates);
     return NextResponse.json({ success: true, cms: updated });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

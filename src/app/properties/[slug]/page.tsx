@@ -20,6 +20,7 @@ import {
 import { db } from '@/lib/db';
 import { WhatsAppIcon } from '@/components/icons/SocialIcons';
 import { buildWhatsAppUrl, buildPhoneUrl } from '@/lib/utils';
+import PropertyGallery from '@/components/properties/PropertyGallery';
 
 interface PropertyDetailsPageProps {
   params: Promise<{ slug: string }>;
@@ -27,6 +28,7 @@ interface PropertyDetailsPageProps {
 
 export async function generateMetadata({ params }: PropertyDetailsPageProps): Promise<Metadata> {
   const { slug } = await params;
+  await db.fetchProperties();
   const property = db.getPropertyBySlug(slug);
 
   if (!property) {
@@ -48,6 +50,7 @@ export const revalidate = 0;
 
 export default async function PropertyDetailsPage({ params }: PropertyDetailsPageProps) {
   const { slug } = await params;
+  await db.fetchProperties();
   const property = db.getPropertyBySlug(slug);
 
   if (!property) {
@@ -98,37 +101,8 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
       {/* Property Details Container */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-6 sm:space-y-8 grow">
         
-        {/* 1. DIRECT IMMERSIVE SITE IMAGES (100% Clean, pristine, zero floating badge clutter) */}
-        <div className="space-y-3">
-          {/* Main Visual Photo */}
-          <div className="relative h-[300px] sm:h-[480px] lg:h-[520px] w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-100 border border-slate-200/90 shadow-md">
-            <Image
-              src={images[0]}
-              alt={property.title}
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 1000px"
-              className="object-cover"
-            />
-          </div>
-
-          {/* Thumbnail Gallery (if more than 1 image) */}
-          {images.length > 1 && (
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-              {images.map((img, i) => (
-                <div key={i} className="relative h-20 sm:h-28 rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
-                  <Image
-                    src={img}
-                    alt={`${property.title} thumbnail ${i + 1}`}
-                    fill
-                    sizes="250px"
-                    className="object-cover hover:scale-105 transition-transform"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        {/* 1. DIRECT IMMERSIVE E-COMMERCE PHOTO GALLERY */}
+        <PropertyGallery images={images} title={property.title} />
 
         {/* 2. MODERN EDITORIAL HEADING & PROPERTY TYPE (No pill badges, no pricing box) */}
         <div className="space-y-2 pt-1 border-b border-slate-200 pb-5">

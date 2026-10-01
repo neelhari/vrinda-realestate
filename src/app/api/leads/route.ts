@@ -11,7 +11,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Name and Phone number are required' }, { status: 400 });
     }
 
-    const lead = db.addLead({
+    const lead = await db.addLead({
       name,
       phone,
       email: email || '',
@@ -36,7 +36,7 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const leads = db.getLeads();
+  const leads = await db.fetchLeads();
   return NextResponse.json({ success: true, leads });
 }
 
@@ -53,7 +53,7 @@ export async function PUT(req: Request) {
       return NextResponse.json({ error: 'Lead ID is required' }, { status: 400 });
     }
 
-    const updated = db.updateLead(id, updates);
+    const updated = await db.updateLead(id, updates);
     return NextResponse.json({ success: true, lead: updated });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
@@ -73,7 +73,7 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: 'Lead ID is required' }, { status: 400 });
     }
 
-    const deleted = db.deleteLead(id);
+    const deleted = await db.deleteLead(id);
     return NextResponse.json({ success: deleted });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

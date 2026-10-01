@@ -11,7 +11,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Name, Phone number, and Preferred Date are required' }, { status: 400 });
     }
 
-    const visit = db.addSiteVisit({
+    const visit = await db.addSiteVisit({
       name,
       phone,
       whatsapp: whatsapp || phone,
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     });
 
     // Also automatically register as a lead
-    db.addLead({
+    await db.addLead({
       name,
       phone,
       whatsapp: whatsapp || phone,
@@ -52,7 +52,7 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const visits = db.getSiteVisits();
+  const visits = await db.fetchSiteVisits();
   return NextResponse.json({ success: true, visits });
 }
 
@@ -69,7 +69,7 @@ export async function PUT(req: Request) {
       return NextResponse.json({ error: 'Visit ID is required' }, { status: 400 });
     }
 
-    const updated = db.updateSiteVisit(id, updates);
+    const updated = await db.updateSiteVisit(id, updates);
     return NextResponse.json({ success: true, visit: updated });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
@@ -89,7 +89,7 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: 'Visit ID is required' }, { status: 400 });
     }
 
-    const deleted = db.deleteSiteVisit(id);
+    const deleted = await db.deleteSiteVisit(id);
     return NextResponse.json({ success: deleted });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

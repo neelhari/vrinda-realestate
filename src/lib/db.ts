@@ -1,5 +1,4 @@
-import fs from 'fs';
-import path from 'path';
+import { supabaseAdmin } from './supabase';
 import { Property, Lead, SiteVisit, Testimonial, LocationItem, ServiceItem, GalleryItem, CMSSettings } from './types';
 import { 
   initialCMS, 
@@ -12,284 +11,575 @@ import {
   initialGallery 
 } from './initial-data';
 
-interface DatabaseSchema {
-  cms: CMSSettings;
-  properties: Property[];
-  leads: Lead[];
-  siteVisits: SiteVisit[];
-  testimonials: Testimonial[];
-  locations: LocationItem[];
-  services: ServiceItem[];
-  gallery: GalleryItem[];
+// In-memory cache for fast SSR renders and fallback
+let cache = {
+  cms: { ...initialCMS },
+  properties: [...initialProperties],
+  leads: [...initialLeads],
+  siteVisits: [...initialSiteVisits],
+  testimonials: [...initialTestimonials],
+  locations: [...initialLocations],
+  services: [...initialServices],
+  gallery: [...initialGallery],
+};
+
+// Transformers: Postgres snake_case <-> TypeScript camelCase
+function mapPropertyFromDb(row: any): Property {
+  return {
+    id: row.id,
+    slug: row.slug,
+    title: row.title,
+    type: row.type,
+    status: row.status,
+    featured: Boolean(row.featured),
+    location: row.location,
+    address: row.address,
+    price: Number(row.price) || 0,
+    priceLabel: row.price_label || 'Contact for Price',
+    area: Number(row.area) || 0,
+    areaUnit: row.area_unit || 'sq.yards',
+    dimensions: row.dimensions || '',
+    facing: row.facing || '',
+    bedrooms: row.bedrooms ? Number(row.bedrooms) : undefined,
+    bathrooms: row.bathrooms ? Number(row.bathrooms) : undefined,
+    description: row.description || '',
+    highlights: Array.isArray(row.highlights) ? row.highlights : [],
+    amenities: Array.isArray(row.amenities) ? row.amenities : [],
+    images: Array.isArray(row.images) && row.images.length > 0 ? row.images : ['/images/category-plots.jpg'],
+    floorPlanUrl: row.floor_plan_url || '',
+    videoUrl: row.video_url || '',
+    dtcpApproved: Boolean(row.dtcp_approved),
+    reraApproved: Boolean(row.rera_approved),
+    possessionDate: row.possession_date || 'Immediate',
+    createdAt: row.created_at || new Date().toISOString(),
+    updatedAt: row.updated_at || new Date().toISOString()
+  };
 }
 
-const DB_DIR = path.join(process.cwd(), 'data');
-const DB_FILE = path.join(DB_DIR, 'db.json');
-
-function ensureDb(): DatabaseSchema {
-  if (!fs.existsSync(DB_DIR)) {
-    fs.mkdirSync(DB_DIR, { recursive: true });
-  }
-
-  if (!fs.existsSync(DB_FILE)) {
-    const defaultData: DatabaseSchema = {
-      cms: initialCMS,
-      properties: initialProperties,
-      leads: initialLeads,
-      siteVisits: initialSiteVisits,
-      testimonials: initialTestimonials,
-      locations: initialLocations,
-      services: initialServices,
-      gallery: initialGallery
-    };
-    fs.writeFileSync(DB_FILE, JSON.stringify(defaultData, null, 2), 'utf-8');
-    return defaultData;
-  }
-
-  try {
-    const raw = fs.readFileSync(DB_FILE, 'utf-8');
-    const parsed = JSON.parse(raw);
-    return {
-      cms: { ...initialCMS, ...(parsed.cms || {}) },
-      properties: Array.isArray(parsed.properties) ? parsed.properties : initialProperties,
-      leads: Array.isArray(parsed.leads) ? parsed.leads : initialLeads,
-      siteVisits: Array.isArray(parsed.siteVisits) ? parsed.siteVisits : initialSiteVisits,
-      testimonials: Array.isArray(parsed.testimonials) ? parsed.testimonials : initialTestimonials,
-      locations: Array.isArray(parsed.locations) ? parsed.locations : initialLocations,
-      services: Array.isArray(parsed.services) ? parsed.services : initialServices,
-      gallery: Array.isArray(parsed.gallery) ? parsed.gallery : initialGallery,
-    };
-  } catch {
-    const defaultData: DatabaseSchema = {
-      cms: initialCMS,
-      properties: initialProperties,
-      leads: initialLeads,
-      siteVisits: initialSiteVisits,
-      testimonials: initialTestimonials,
-      locations: initialLocations,
-      services: initialServices,
-      gallery: initialGallery
-    };
-    fs.writeFileSync(DB_FILE, JSON.stringify(defaultData, null, 2), 'utf-8');
-    return defaultData;
-  }
+function mapPropertyToDb(p: Property): any {
+  return {
+    id: p.id,
+    slug: p.slug,
+    title: p.title,
+    type: p.type,
+    status: p.status,
+    featured: p.featured,
+    location: p.location,
+    address: p.address,
+    price: p.price,
+    price_label: p.priceLabel,
+    area: p.area,
+    area_unit: p.areaUnit,
+    dimensions: p.dimensions,
+    facing: p.facing,
+    bedrooms: p.bedrooms,
+    bathrooms: p.bathrooms,
+    description: p.description,
+    highlights: p.highlights || [],
+    amenities: p.amenities || [],
+    images: p.images || [],
+    floor_plan_url: p.floorPlanUrl,
+    video_url: p.videoUrl,
+    dtcp_approved: p.dtcpApproved,
+    rera_approved: p.reraApproved,
+    possession_date: p.possessionDate,
+    updated_at: new Date().toISOString()
+  };
 }
 
-function saveDb(data: DatabaseSchema): void {
-  if (!fs.existsSync(DB_DIR)) {
-    fs.mkdirSync(DB_DIR, { recursive: true });
-  }
-  fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
+function mapLeadFromDb(row: any): Lead {
+  return {
+    id: row.id,
+    name: row.name,
+    phone: row.phone,
+    whatsapp: row.whatsapp,
+    email: row.email,
+    interestedPropertyId: row.interested_property_id,
+    interestedPropertyName: row.interested_property_name,
+    propertyType: row.property_type,
+    source: row.source || 'Website Form',
+    message: row.message,
+    status: row.status || 'New',
+    notes: row.notes,
+    createdAt: row.created_at || new Date().toISOString(),
+    updatedAt: row.updated_at || new Date().toISOString()
+  };
+}
+
+function mapSiteVisitFromDb(row: any): SiteVisit {
+  return {
+    id: row.id,
+    name: row.name,
+    phone: row.phone,
+    whatsapp: row.whatsapp,
+    email: row.email,
+    propertyId: row.property_id,
+    propertyName: row.property_name,
+    preferredDate: row.preferred_date,
+    preferredTime: row.preferred_time,
+    attendeesCount: row.attendees_count || 1,
+    pickupRequired: Boolean(row.pickup_required),
+    message: row.message,
+    status: row.status || 'Requested',
+    notes: row.notes,
+    createdAt: row.created_at || new Date().toISOString()
+  };
+}
+
+function mapTestimonialFromDb(row: any): Testimonial {
+  return {
+    id: row.id,
+    name: row.name,
+    location: row.location,
+    role: row.role,
+    rating: row.rating || 5,
+    comment: row.comment,
+    propertyName: row.property_name,
+    avatarUrl: row.avatar_url,
+    isPublished: row.is_published !== false,
+    createdAt: row.created_at || new Date().toISOString()
+  };
+}
+
+function mapLocationFromDb(row: any): LocationItem {
+  return {
+    id: row.id,
+    name: row.name,
+    tagline: row.tagline,
+    description: row.description,
+    highlights: Array.isArray(row.highlights) ? row.highlights : [],
+    imageUrl: row.image_url || '/images/category-plots.jpg',
+    isActive: row.is_active !== false
+  };
+}
+
+function mapGalleryFromDb(row: any): GalleryItem {
+  return {
+    id: row.id,
+    title: row.title,
+    category: row.category || 'plots',
+    imageUrl: row.image_url || '/images/category-plots.jpg',
+    caption: row.caption,
+    featured: Boolean(row.featured),
+    createdAt: row.created_at || new Date().toISOString()
+  };
+}
+
+function mapCMSFromDb(row: any): CMSSettings {
+  return {
+    businessName: row.business_name || initialCMS.businessName,
+    founderName: row.founder_name || initialCMS.founderName,
+    founderTitle: row.founder_title || initialCMS.founderTitle,
+    founderAddress: row.founder_address || initialCMS.founderAddress,
+    businessAddress: row.business_address || initialCMS.businessAddress,
+    primaryPhone: row.primary_phone || initialCMS.primaryPhone,
+    whatsappNumber: row.whatsapp_number || initialCMS.whatsappNumber,
+    email: row.email || initialCMS.email,
+    instagram: row.instagram || initialCMS.instagram,
+    youtube: row.youtube || initialCMS.youtube,
+    heroHeadline: row.hero_headline || initialCMS.heroHeadline,
+    heroSubheadline: row.hero_subheadline || initialCMS.heroSubheadline,
+    aboutStory: row.about_story || initialCMS.aboutStory,
+    bannerNotice: row.banner_notice || undefined,
+  };
 }
 
 export const db = {
   // CMS
   getCMS: (): CMSSettings => {
-    return ensureDb().cms;
+    return cache.cms;
   },
-  updateCMS: (updates: Partial<CMSSettings>): CMSSettings => {
-    const current = ensureDb();
-    current.cms = { ...current.cms, ...updates };
-    saveDb(current);
-    return current.cms;
+  fetchCMS: async (): Promise<CMSSettings> => {
+    try {
+      const { data, error } = await supabaseAdmin
+        .from('cms_settings')
+        .select('*')
+        .eq('id', 'default')
+        .single();
+      if (!error && data) {
+        cache.cms = mapCMSFromDb(data);
+      }
+    } catch (err) {
+      console.warn('Supabase fetchCMS fallback:', err);
+    }
+    return cache.cms;
+  },
+  updateCMS: async (updates: Partial<CMSSettings>): Promise<CMSSettings> => {
+    cache.cms = { ...cache.cms, ...updates };
+    try {
+      await supabaseAdmin.from('cms_settings').upsert({
+        id: 'default',
+        business_name: cache.cms.businessName,
+        founder_name: cache.cms.founderName,
+        founder_title: cache.cms.founderTitle,
+        founder_address: cache.cms.founderAddress,
+        business_address: cache.cms.businessAddress,
+        primary_phone: cache.cms.primaryPhone,
+        whatsapp_number: cache.cms.whatsappNumber,
+        email: cache.cms.email,
+        instagram: cache.cms.instagram,
+        youtube: cache.cms.youtube,
+        hero_headline: cache.cms.heroHeadline,
+        hero_subheadline: cache.cms.heroSubheadline,
+        about_story: cache.cms.aboutStory,
+        banner_notice: cache.cms.bannerNotice,
+        updated_at: new Date().toISOString()
+      });
+    } catch (err) {
+      console.error('Supabase updateCMS error:', err);
+    }
+    return cache.cms;
   },
 
   // Properties
   getProperties: (): Property[] => {
-    return ensureDb().properties;
+    return cache.properties;
+  },
+  fetchProperties: async (): Promise<Property[]> => {
+    try {
+      const { data, error } = await supabaseAdmin
+        .from('properties')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (!error && data && data.length > 0) {
+        cache.properties = data.map(mapPropertyFromDb);
+      }
+    } catch (err) {
+      console.warn('Supabase fetchProperties fallback:', err);
+    }
+    return cache.properties;
   },
   getPropertyBySlug: (slug: string): Property | undefined => {
-    return ensureDb().properties.find((p) => p.slug === slug);
+    return cache.properties.find((p) => p.slug === slug);
   },
   getPropertyById: (id: string): Property | undefined => {
-    return ensureDb().properties.find((p) => p.id === id);
+    return cache.properties.find((p) => p.id === id);
   },
-  saveProperty: (property: Property): Property => {
-    const current = ensureDb();
-    const index = current.properties.findIndex((p) => p.id === property.id);
-    if (index >= 0) {
-      current.properties[index] = { ...property, updatedAt: new Date().toISOString() };
+  saveProperty: async (property: Property): Promise<Property> => {
+    const idx = cache.properties.findIndex((p) => p.id === property.id);
+    if (idx >= 0) {
+      cache.properties[idx] = { ...property, updatedAt: new Date().toISOString() };
     } else {
-      current.properties.unshift({ ...property, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+      cache.properties.unshift({ ...property, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
     }
-    saveDb(current);
+
+    try {
+      const dbRow = mapPropertyToDb(property);
+      await supabaseAdmin.from('properties').upsert(dbRow);
+    } catch (err) {
+      console.error('Supabase saveProperty error:', err);
+    }
     return property;
   },
-  deleteProperty: (id: string): boolean => {
-    const current = ensureDb();
-    const initialLen = current.properties.length;
-    current.properties = current.properties.filter((p) => p.id !== id);
-    if (current.properties.length !== initialLen) {
-      saveDb(current);
+  deleteProperty: async (id: string): Promise<boolean> => {
+    cache.properties = cache.properties.filter((p) => p.id !== id);
+    try {
+      await supabaseAdmin.from('properties').delete().eq('id', id);
       return true;
+    } catch (err) {
+      console.error('Supabase deleteProperty error:', err);
+      return false;
     }
-    return false;
   },
 
   // Leads
   getLeads: (): Lead[] => {
-    return ensureDb().leads;
+    return cache.leads;
   },
-  addLead: (lead: Omit<Lead, 'id' | 'createdAt' | 'updatedAt'>): Lead => {
-    const current = ensureDb();
+  fetchLeads: async (): Promise<Lead[]> => {
+    try {
+      const { data, error } = await supabaseAdmin
+        .from('leads')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (!error && data) {
+        cache.leads = data.map(mapLeadFromDb);
+      }
+    } catch (err) {
+      console.warn('Supabase fetchLeads fallback:', err);
+    }
+    return cache.leads;
+  },
+  addLead: async (lead: Omit<Lead, 'id' | 'createdAt' | 'updatedAt'>): Promise<Lead> => {
     const newLead: Lead = {
       ...lead,
       id: `lead-${Date.now()}`,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
-    current.leads.unshift(newLead);
-    saveDb(current);
+    cache.leads.unshift(newLead);
+    try {
+      await supabaseAdmin.from('leads').insert({
+        id: newLead.id,
+        name: newLead.name,
+        phone: newLead.phone,
+        whatsapp: newLead.whatsapp,
+        email: newLead.email,
+        interested_property_id: newLead.interestedPropertyId,
+        interested_property_name: newLead.interestedPropertyName,
+        property_type: newLead.propertyType,
+        source: newLead.source,
+        message: newLead.message,
+        status: newLead.status,
+        notes: newLead.notes
+      });
+    } catch (err) {
+      console.error('Supabase addLead error:', err);
+    }
     return newLead;
   },
-  updateLead: (id: string, updates: Partial<Lead>): Lead | null => {
-    const current = ensureDb();
-    const index = current.leads.findIndex((l) => l.id === id);
-    if (index >= 0) {
-      current.leads[index] = { ...current.leads[index], ...updates, updatedAt: new Date().toISOString() };
-      saveDb(current);
-      return current.leads[index];
+  updateLead: async (id: string, updates: Partial<Lead>): Promise<Lead | null> => {
+    const idx = cache.leads.findIndex((l) => l.id === id);
+    if (idx >= 0) {
+      cache.leads[idx] = { ...cache.leads[idx], ...updates, updatedAt: new Date().toISOString() };
+      try {
+        const payload: any = {};
+        if (updates.status) payload.status = updates.status;
+        if (updates.notes !== undefined) payload.notes = updates.notes;
+        payload.updated_at = new Date().toISOString();
+        await supabaseAdmin.from('leads').update(payload).eq('id', id);
+      } catch (err) {
+        console.error('Supabase updateLead error:', err);
+      }
+      return cache.leads[idx];
     }
     return null;
   },
-  deleteLead: (id: string): boolean => {
-    const current = ensureDb();
-    const initialLen = current.leads.length;
-    current.leads = current.leads.filter((l) => l.id !== id);
-    if (current.leads.length !== initialLen) {
-      saveDb(current);
+  deleteLead: async (id: string): Promise<boolean> => {
+    cache.leads = cache.leads.filter((l) => l.id !== id);
+    try {
+      await supabaseAdmin.from('leads').delete().eq('id', id);
       return true;
+    } catch (err) {
+      console.error('Supabase deleteLead error:', err);
+      return false;
     }
-    return false;
   },
 
   // Site Visits
   getSiteVisits: (): SiteVisit[] => {
-    return ensureDb().siteVisits;
+    return cache.siteVisits;
   },
-  addSiteVisit: (visit: Omit<SiteVisit, 'id' | 'createdAt'>): SiteVisit => {
-    const current = ensureDb();
+  fetchSiteVisits: async (): Promise<SiteVisit[]> => {
+    try {
+      const { data, error } = await supabaseAdmin
+        .from('site_visits')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (!error && data) {
+        cache.siteVisits = data.map(mapSiteVisitFromDb);
+      }
+    } catch (err) {
+      console.warn('Supabase fetchSiteVisits fallback:', err);
+    }
+    return cache.siteVisits;
+  },
+  addSiteVisit: async (visit: Omit<SiteVisit, 'id' | 'createdAt'>): Promise<SiteVisit> => {
     const newVisit: SiteVisit = {
       ...visit,
       id: `visit-${Date.now()}`,
       createdAt: new Date().toISOString()
     };
-    current.siteVisits.unshift(newVisit);
-    saveDb(current);
+    cache.siteVisits.unshift(newVisit);
+    try {
+      await supabaseAdmin.from('site_visits').insert({
+        id: newVisit.id,
+        name: newVisit.name,
+        phone: newVisit.phone,
+        whatsapp: newVisit.whatsapp,
+        email: newVisit.email,
+        property_id: newVisit.propertyId,
+        property_name: newVisit.propertyName,
+        preferred_date: newVisit.preferredDate,
+        preferred_time: newVisit.preferredTime,
+        attendees_count: newVisit.attendeesCount,
+        pickup_required: newVisit.pickupRequired,
+        message: newVisit.message,
+        status: newVisit.status,
+        notes: newVisit.notes
+      });
+    } catch (err) {
+      console.error('Supabase addSiteVisit error:', err);
+    }
     return newVisit;
   },
-  updateSiteVisit: (id: string, updates: Partial<SiteVisit>): SiteVisit | null => {
-    const current = ensureDb();
-    const index = current.siteVisits.findIndex((v) => v.id === id);
-    if (index >= 0) {
-      current.siteVisits[index] = { ...current.siteVisits[index], ...updates };
-      saveDb(current);
-      return current.siteVisits[index];
+  updateSiteVisit: async (id: string, updates: Partial<SiteVisit>): Promise<SiteVisit | null> => {
+    const idx = cache.siteVisits.findIndex((v) => v.id === id);
+    if (idx >= 0) {
+      cache.siteVisits[idx] = { ...cache.siteVisits[idx], ...updates };
+      try {
+        const payload: any = {};
+        if (updates.status) payload.status = updates.status;
+        if (updates.notes !== undefined) payload.notes = updates.notes;
+        await supabaseAdmin.from('site_visits').update(payload).eq('id', id);
+      } catch (err) {
+        console.error('Supabase updateSiteVisit error:', err);
+      }
+      return cache.siteVisits[idx];
     }
     return null;
   },
-  deleteSiteVisit: (id: string): boolean => {
-    const current = ensureDb();
-    const initialLen = current.siteVisits.length;
-    current.siteVisits = current.siteVisits.filter((v) => v.id !== id);
-    if (current.siteVisits.length !== initialLen) {
-      saveDb(current);
+  deleteSiteVisit: async (id: string): Promise<boolean> => {
+    cache.siteVisits = cache.siteVisits.filter((v) => v.id !== id);
+    try {
+      await supabaseAdmin.from('site_visits').delete().eq('id', id);
       return true;
+    } catch (err) {
+      console.error('Supabase deleteSiteVisit error:', err);
+      return false;
     }
-    return false;
   },
 
   // Testimonials
   getTestimonials: (): Testimonial[] => {
-    return ensureDb().testimonials;
+    return cache.testimonials;
   },
-  saveTestimonial: (item: Testimonial): Testimonial => {
-    const current = ensureDb();
-    const idx = current.testimonials.findIndex((t) => t.id === item.id);
-    if (idx >= 0) {
-      current.testimonials[idx] = item;
-    } else {
-      current.testimonials.unshift(item);
+  fetchTestimonials: async (): Promise<Testimonial[]> => {
+    try {
+      const { data, error } = await supabaseAdmin
+        .from('testimonials')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (!error && data) {
+        cache.testimonials = data.map(mapTestimonialFromDb);
+      }
+    } catch (err) {
+      console.warn('Supabase fetchTestimonials fallback:', err);
     }
-    saveDb(current);
+    return cache.testimonials;
+  },
+  saveTestimonial: async (item: Testimonial): Promise<Testimonial> => {
+    const idx = cache.testimonials.findIndex((t) => t.id === item.id);
+    if (idx >= 0) {
+      cache.testimonials[idx] = item;
+    } else {
+      cache.testimonials.unshift(item);
+    }
+    try {
+      await supabaseAdmin.from('testimonials').upsert({
+        id: item.id,
+        name: item.name,
+        location: item.location,
+        role: item.role,
+        rating: item.rating,
+        comment: item.comment,
+        property_name: item.propertyName,
+        avatar_url: item.avatarUrl,
+        is_published: item.isPublished
+      });
+    } catch (err) {
+      console.error('Supabase saveTestimonial error:', err);
+    }
     return item;
   },
-  deleteTestimonial: (id: string): boolean => {
-    const current = ensureDb();
-    const initialLen = current.testimonials.length;
-    current.testimonials = current.testimonials.filter((t) => t.id !== id);
-    if (current.testimonials.length !== initialLen) {
-      saveDb(current);
+  deleteTestimonial: async (id: string): Promise<boolean> => {
+    cache.testimonials = cache.testimonials.filter((t) => t.id !== id);
+    try {
+      await supabaseAdmin.from('testimonials').delete().eq('id', id);
       return true;
+    } catch (err) {
+      console.error('Supabase deleteTestimonial error:', err);
+      return false;
     }
-    return false;
   },
 
   // Locations
   getLocations: (): LocationItem[] => {
-    return ensureDb().locations;
+    return cache.locations;
   },
-  saveLocation: (item: LocationItem): LocationItem => {
-    const current = ensureDb();
-    const idx = current.locations.findIndex((l) => l.id === item.id);
-    if (idx >= 0) {
-      current.locations[idx] = item;
-    } else {
-      current.locations.push(item);
+  fetchLocations: async (): Promise<LocationItem[]> => {
+    try {
+      const { data, error } = await supabaseAdmin
+        .from('locations')
+        .select('*');
+      if (!error && data && data.length > 0) {
+        cache.locations = data.map(mapLocationFromDb);
+      }
+    } catch (err) {
+      console.warn('Supabase fetchLocations fallback:', err);
     }
-    saveDb(current);
+    return cache.locations;
+  },
+  saveLocation: async (item: LocationItem): Promise<LocationItem> => {
+    const idx = cache.locations.findIndex((l) => l.id === item.id);
+    if (idx >= 0) {
+      cache.locations[idx] = item;
+    } else {
+      cache.locations.push(item);
+    }
+    try {
+      await supabaseAdmin.from('locations').upsert({
+        id: item.id,
+        name: item.name,
+        tagline: item.tagline,
+        description: item.description,
+        highlights: item.highlights || [],
+        image_url: item.imageUrl,
+        is_active: item.isActive
+      });
+    } catch (err) {
+      console.error('Supabase saveLocation error:', err);
+    }
     return item;
   },
-  deleteLocation: (id: string): boolean => {
-    const current = ensureDb();
-    const initialLen = current.locations.length;
-    current.locations = current.locations.filter((l) => l.id !== id);
-    if (current.locations.length !== initialLen) {
-      saveDb(current);
+  deleteLocation: async (id: string): Promise<boolean> => {
+    cache.locations = cache.locations.filter((l) => l.id !== id);
+    try {
+      await supabaseAdmin.from('locations').delete().eq('id', id);
       return true;
+    } catch (err) {
+      console.error('Supabase deleteLocation error:', err);
+      return false;
     }
-    return false;
-  },
-
-  // Services
-  getServices: (): ServiceItem[] => {
-    return ensureDb().services;
-  },
-  saveService: (item: ServiceItem): ServiceItem => {
-    const current = ensureDb();
-    const idx = current.services.findIndex((s) => s.id === item.id);
-    if (idx >= 0) {
-      current.services[idx] = item;
-    } else {
-      current.services.push(item);
-    }
-    saveDb(current);
-    return item;
   },
 
   // Gallery
   getGallery: (): GalleryItem[] => {
-    return ensureDb().gallery;
+    return cache.gallery;
   },
-  saveGalleryItem: (item: GalleryItem): GalleryItem => {
-    const current = ensureDb();
-    const idx = current.gallery.findIndex((g) => g.id === item.id);
-    if (idx >= 0) {
-      current.gallery[idx] = item;
-    } else {
-      current.gallery.unshift(item);
+  fetchGallery: async (): Promise<GalleryItem[]> => {
+    try {
+      const { data, error } = await supabaseAdmin
+        .from('gallery')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (!error && data && data.length > 0) {
+        cache.gallery = data.map(mapGalleryFromDb);
+      }
+    } catch (err) {
+      console.warn('Supabase fetchGallery fallback:', err);
     }
-    saveDb(current);
+    return cache.gallery;
+  },
+  saveGalleryItem: async (item: GalleryItem): Promise<GalleryItem> => {
+    const idx = cache.gallery.findIndex((g) => g.id === item.id);
+    if (idx >= 0) {
+      cache.gallery[idx] = item;
+    } else {
+      cache.gallery.unshift(item);
+    }
+    try {
+      await supabaseAdmin.from('gallery').upsert({
+        id: item.id,
+        title: item.title,
+        category: item.category,
+        image_url: item.imageUrl,
+        caption: item.caption,
+        featured: item.featured
+      });
+    } catch (err) {
+      console.error('Supabase saveGalleryItem error:', err);
+    }
     return item;
   },
-  deleteGalleryItem: (id: string): boolean => {
-    const current = ensureDb();
-    const initialLen = current.gallery.length;
-    current.gallery = current.gallery.filter((g) => g.id !== id);
-    if (current.gallery.length !== initialLen) {
-      saveDb(current);
+  deleteGalleryItem: async (id: string): Promise<boolean> => {
+    cache.gallery = cache.gallery.filter((g) => g.id !== id);
+    try {
+      await supabaseAdmin.from('gallery').delete().eq('id', id);
       return true;
+    } catch (err) {
+      console.error('Supabase deleteGalleryItem error:', err);
+      return false;
     }
-    return false;
   }
 };
