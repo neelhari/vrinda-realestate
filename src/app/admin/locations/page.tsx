@@ -4,8 +4,8 @@ import LocationsAdminClient from './LocationsAdminClient';
 
 export const revalidate = 0;
 
-export default function LocationsAdminPage() {
-  const locations = db.getLocations();
+export default async function LocationsAdminPage() {
+  const locations = await db.fetchLocations();
 
   return <LocationsAdminClient initialLocations={locations} />;
 }

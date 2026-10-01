@@ -15,8 +15,8 @@ export const metadata: Metadata = {
 
 export const revalidate = 0;
 
-export default function GalleryPage() {
-  const gallery = db.getGallery();
+export default async function GalleryPage() {
+  const gallery = await db.fetchGallery();
 
   return (
     <main className="min-h-screen flex flex-col bg-white">

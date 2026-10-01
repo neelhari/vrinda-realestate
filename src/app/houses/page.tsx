@@ -14,8 +14,9 @@ export const metadata: Metadata = {
 
 export const revalidate = 0;
 
-export default function HousesPage() {
-  const houses = db.getProperties().filter((p) => p.type === 'house' || p.type === 'villa');
+export default async function HousesPage() {
+  const allProperties = await db.fetchProperties();
+  const houses = allProperties.filter((p) => p.type === 'house' || p.type === 'villa');
 
   return (
     <main className="min-h-screen flex flex-col bg-white">

@@ -14,8 +14,9 @@ export const metadata: Metadata = {
 
 export const revalidate = 0;
 
-export default function PlotsPage() {
-  const plots = db.getProperties().filter((p) => p.type === 'plot');
+export default async function PlotsPage() {
+  const allProperties = await db.fetchProperties();
+  const plots = allProperties.filter((p) => p.type === 'plot');
 
   return (
     <main className="min-h-screen flex flex-col bg-white">

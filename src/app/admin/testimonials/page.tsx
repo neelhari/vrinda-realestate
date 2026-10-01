@@ -4,8 +4,8 @@ import TestimonialsAdminClient from './TestimonialsAdminClient';
 
 export const revalidate = 0;
 
-export default function TestimonialsAdminPage() {
-  const testimonials = db.getTestimonials();
+export default async function TestimonialsAdminPage() {
+  const testimonials = await db.fetchTestimonials();
 
   return <TestimonialsAdminClient initialTestimonials={testimonials} />;
 }

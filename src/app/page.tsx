@@ -15,6 +15,13 @@ import { db } from '@/lib/db';
 export const revalidate = 0; // Ensure fresh dynamic data from the database
 
 export default async function HomePage() {
+  await Promise.all([
+    db.fetchProperties(),
+    db.fetchLocations(),
+    db.fetchTestimonials(),
+    db.fetchCMS()
+  ]);
+
   const properties = db.getProperties();
   const locations = db.getLocations();
   const testimonials = db.getTestimonials();

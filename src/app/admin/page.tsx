@@ -4,11 +4,13 @@ import DashboardClient from './DashboardClient';
 
 export const revalidate = 0;
 
-export default function AdminDashboardPage() {
-  const properties = db.getProperties();
-  const leads = db.getLeads();
-  const siteVisits = db.getSiteVisits();
-  const cms = db.getCMS();
+export default async function AdminDashboardPage() {
+  const [properties, leads, siteVisits, cms] = await Promise.all([
+    db.fetchProperties(),
+    db.fetchLeads(),
+    db.fetchSiteVisits(),
+    db.fetchCMS()
+  ]);
 
   return (
     <DashboardClient

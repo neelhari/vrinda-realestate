@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 
 export const revalidate = 0;
 
-export default function PropertiesPage() {
-  const properties = db.getProperties();
+export default async function PropertiesPage() {
+  const properties = await db.fetchProperties();
 
   return (
     <main className="min-h-screen flex flex-col bg-white">

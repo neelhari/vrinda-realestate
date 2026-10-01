@@ -4,8 +4,8 @@ import GalleryAdminClient from './GalleryAdminClient';
 
 export const revalidate = 0;
 
-export default function GalleryAdminPage() {
-  const gallery = db.getGallery();
+export default async function GalleryAdminPage() {
+  const gallery = await db.fetchGallery();
 
   return <GalleryAdminClient initialGallery={gallery} />;
 }

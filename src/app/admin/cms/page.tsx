@@ -4,8 +4,8 @@ import CMSAdminClient from './CMSAdminClient';
 
 export const revalidate = 0;
 
-export default function CMSAdminPage() {
-  const cms = db.getCMS();
+export default async function CMSAdminPage() {
+  const cms = await db.fetchCMS();
 
   return <CMSAdminClient initialCMS={cms} />;
 }

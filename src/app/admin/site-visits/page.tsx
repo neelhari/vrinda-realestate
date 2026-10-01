@@ -4,8 +4,8 @@ import SiteVisitsAdminClient from './SiteVisitsAdminClient';
 
 export const revalidate = 0;
 
-export default function SiteVisitsAdminPage() {
-  const visits = db.getSiteVisits();
+export default async function SiteVisitsAdminPage() {
+  const visits = await db.fetchSiteVisits();
 
   return <SiteVisitsAdminClient initialVisits={visits} />;
 }
