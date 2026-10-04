@@ -2,82 +2,111 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Tag, Car, Award, ShieldCheck, ArrowUpRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Tag, Car, Award, ShieldCheck, Check, ArrowUpRight } from 'lucide-react';
 
-const HIGHLIGHTS = [
+const HIGHLIGHT_CARDS = [
   {
     id: 'budget-plots',
-    title: '₹4L – ₹5Cr Plots',
-    subtitle: 'Plots for Every Budget',
+    metric: '₹4L – 5Cr',
+    number: '01',
+    label: 'Plots For Every Budget',
+    highlight: 'Affordable to luxury prime plots',
     href: '/plots',
-    icon: <Tag className="w-5 h-5 text-amber-600" />,
+    icon: <Tag className="w-4 h-4 text-amber-600" />,
+    accentColor: 'text-amber-600 group-hover:text-amber-700',
     iconBg: 'bg-amber-50 border-amber-100',
-    hoverBorder: 'hover:border-amber-400'
+    hoverBorder: 'hover:border-amber-300'
   },
   {
     id: 'free-car',
-    title: 'Free Car Pickup & Drop',
-    subtitle: 'VIP Doorstep Site Visits',
+    metric: 'Free Car',
+    number: '02',
+    label: 'Pickup & Drop Service',
+    highlight: 'Complimentary doorstep AC ride',
     href: '/site-visit',
-    icon: <Car className="w-5 h-5 text-emerald-600" />,
+    icon: <Car className="w-4 h-4 text-emerald-600" />,
+    accentColor: 'text-emerald-600 group-hover:text-emerald-700',
     iconBg: 'bg-emerald-50 border-emerald-100',
-    hoverBorder: 'hover:border-emerald-400'
+    hoverBorder: 'hover:border-emerald-300'
   },
   {
     id: 'experience',
-    title: '15+ Years Experience',
-    subtitle: '5,000+ Happy Families',
+    metric: '15+ Years',
+    number: '03',
+    label: 'Trusted Experience',
+    highlight: '5,000+ happy land buyers',
     href: '/about',
-    icon: <Award className="w-5 h-5 text-blue-600" />,
+    icon: <Award className="w-4 h-4 text-[#0a4ba6]" />,
+    accentColor: 'text-[#0a4ba6] group-hover:text-[#073575]',
     iconBg: 'bg-blue-50 border-blue-100',
-    hoverBorder: 'hover:border-blue-400'
+    hoverBorder: 'hover:border-blue-300'
   },
   {
     id: 'clear-titles',
-    title: '100% Clear Titles',
-    subtitle: 'Direct Spot Registration',
+    metric: '100% Clear',
+    number: '04',
+    label: 'Spot Registration',
+    highlight: 'Direct Sub-Registrar transfer',
     href: '/properties',
-    icon: <ShieldCheck className="w-5 h-5 text-orange-600" />,
+    icon: <ShieldCheck className="w-4 h-4 text-[#ea511c]" />,
+    accentColor: 'text-[#ea511c] group-hover:text-[#d04312]',
     iconBg: 'bg-orange-50 border-orange-100',
-    hoverBorder: 'hover:border-orange-400'
+    hoverBorder: 'hover:border-orange-300'
   }
 ];
 
 export default function QuickHighlights() {
   return (
-    <section className="py-6 sm:py-8 bg-[#f8fafc] border-b border-slate-200/80">
+    <section className="py-8 sm:py-12 bg-slate-50/60 border-b border-slate-200/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* 4 Compact, Clean, App-Style Highlight Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          {HIGHLIGHTS.map((item) => (
-            <Link
-              key={item.id}
-              href={item.href}
-              className={`group flex items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md transition-all duration-200 cursor-pointer ${item.hoverBorder}`}
+        {/* 4 Spacious, Stat-Driven Metric Cards with Zero Text Truncation */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-5">
+          {HIGHLIGHT_CARDS.map((card, idx) => (
+            <motion.div
+              key={card.id}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.35, delay: idx * 0.07 }}
+              whileHover={{ y: -3 }}
+              className="h-full"
             >
-              <div className="flex items-center gap-3 min-w-0">
-                {/* Clean Tinted Icon Box */}
-                <div className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center border shrink-0 ${item.iconBg}`}>
-                  {item.icon}
+              <Link
+                href={card.href}
+                className={`group flex flex-col justify-between h-full p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md transition-all duration-200 cursor-pointer ${card.hoverBorder}`}
+              >
+                {/* Top Row: Icon + Number & Arrow */}
+                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center border ${card.iconBg}`}>
+                    {card.icon}
+                  </div>
+                  
+                  <div className="flex items-center gap-1 text-slate-400 group-hover:text-slate-700 transition-colors">
+                    <span className="text-[10px] font-mono font-medium">{card.number}</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </div>
                 </div>
 
-                {/* Text Content */}
-                <div className="min-w-0">
-                  <h3 className="text-slate-900 font-bold text-xs sm:text-sm truncate group-hover:text-[#0a4ba6] transition-colors">
-                    {item.title}
+                {/* Middle: Big Prominent Metric & Label */}
+                <div className="py-3 space-y-1">
+                  <span className={`text-xl sm:text-2xl lg:text-3xl font-serif font-bold tracking-tight block ${card.accentColor} transition-colors`}>
+                    {card.metric}
+                  </span>
+                  
+                  <h3 className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+                    {card.label}
                   </h3>
-                  <p className="text-slate-500 text-[11px] sm:text-xs truncate font-medium mt-0.5">
-                    {item.subtitle}
-                  </p>
                 </div>
-              </div>
 
-              {/* Arrow Indicator */}
-              <div className="text-slate-300 group-hover:text-[#0a4ba6] transition-colors shrink-0 ml-1">
-                <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </div>
-            </Link>
+                {/* Bottom Row: Checkmark Benefit Bullet */}
+                <div className="pt-2.5 border-t border-slate-100 flex items-center gap-1.5 text-[10px] sm:text-[11px] font-semibold text-emerald-700">
+                  <Check className="w-3 h-3 shrink-0 text-emerald-600" />
+                  <span className="line-clamp-1">{card.highlight}</span>
+                </div>
+              </Link>
+            </motion.div>
           ))}
         </div>
 
