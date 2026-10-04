@@ -46,6 +46,7 @@ function mapPropertyFromDb(row: any): Property {
     highlights: Array.isArray(row.highlights) ? row.highlights : [],
     amenities: Array.isArray(row.amenities) ? row.amenities : [],
     images: Array.isArray(row.images) && row.images.length > 0 ? row.images : ['/images/category-plots.jpg'],
+    videos: Array.isArray(row.videos) ? row.videos : (row.video_url ? [row.video_url] : []),
     floorPlanUrl: row.floor_plan_url || '',
     videoUrl: row.video_url || '',
     dtcpApproved: Boolean(row.dtcp_approved),
@@ -78,8 +79,9 @@ function mapPropertyToDb(p: Property): any {
     highlights: Array.isArray(p.highlights) ? p.highlights : [],
     amenities: Array.isArray(p.amenities) ? p.amenities : [],
     images: Array.isArray(p.images) && p.images.length > 0 ? p.images : ['/images/category-plots.jpg'],
+    videos: Array.isArray(p.videos) ? p.videos : [],
     floor_plan_url: p.floorPlanUrl || null,
-    video_url: p.videoUrl || null,
+    video_url: p.videoUrl || (Array.isArray(p.videos) && p.videos[0]) || null,
     dtcp_approved: Boolean(p.dtcpApproved),
     rera_approved: Boolean(p.reraApproved),
     possession_date: p.possessionDate || null,
@@ -181,6 +183,7 @@ function mapCMSFromDb(row: any): CMSSettings {
     heroSubheadline: row.hero_subheadline || initialCMS.heroSubheadline,
     aboutStory: row.about_story || initialCMS.aboutStory,
     bannerNotice: row.banner_notice || undefined,
+    promoBanners: Array.isArray(row.promo_banners) && row.promo_banners.length > 0 ? row.promo_banners : initialCMS.promoBanners,
   };
 }
 
@@ -223,6 +226,7 @@ export const db = {
         hero_subheadline: cache.cms.heroSubheadline,
         about_story: cache.cms.aboutStory,
         banner_notice: cache.cms.bannerNotice,
+        promo_banners: cache.cms.promoBanners || null,
         updated_at: new Date().toISOString()
       });
     } catch (err) {

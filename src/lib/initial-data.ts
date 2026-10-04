@@ -13,7 +13,37 @@ export const initialCMS: CMSSettings = {
   youtube: "@VrindaRealestate-r8f",
   heroHeadline: "Find a Place Worth Calling Home.",
   heroSubheadline: "Premium residential open plots, luxury villas, and independent houses in prime, high-growth corridors across Ongole, Koppolu, and Andhra Pradesh.",
-  aboutStory: "Founded by Bejapur Ayyappa Sai, Vrinda Real Estate was established with a clear mission: to bring absolute transparency, verified documentation, and genuine investment value to every homebuyer and land investor in Prakasam district and Andhra Pradesh. We guide you from initial site exploration to clear-title legal registration with complete peace of mind."
+  aboutStory: "Founded by Bejapur Ayyappa Sai, Vrinda Real Estate was established with a clear mission: to bring absolute transparency, verified documentation, and genuine investment value to every homebuyer and land investor in Prakasam district and Andhra Pradesh. We guide you from initial site exploration to clear-title legal registration with complete peace of mind.",
+  promoBanners: [
+    {
+      id: 'plots-range',
+      title: '₹4 Lakhs – ₹5 Crores Plots',
+      subtitle: 'Affordable to Luxury • Ongole & Highway',
+      href: '/plots',
+      image: '/images/category-plots.jpg',
+    },
+    {
+      id: 'free-car-service',
+      title: 'Free Car Pickup & Drop',
+      subtitle: 'Doorstep AC Ride for All Site Visits',
+      href: '/site-visit',
+      image: '/images/category-villas.jpg',
+    },
+    {
+      id: 'years-experience',
+      title: '15+ Years Experience',
+      subtitle: '5,000+ Happy Families • 100% Clear Titles',
+      href: '/about',
+      image: '/images/hero-luxury-villa.jpg',
+    },
+    {
+      id: 'growth-corridors',
+      title: 'Prime Growth Corridors',
+      subtitle: 'Koppolu & Bypass • Spot Registration',
+      href: '/properties',
+      image: '/images/category-houses.jpg',
+    },
+  ]
 };
 
 export const initialProperties: Property[] = [

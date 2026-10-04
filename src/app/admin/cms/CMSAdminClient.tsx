@@ -225,6 +225,81 @@ export default function CMSAdminClient({ initialCMS }: CMSAdminClientProps) {
           </div>
         </div>
 
+        {/* Homepage Promo Banner Cards */}
+        <div className="space-y-4 border-b border-slate-100 pb-6">
+          <div>
+            <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+              <FileText className="w-4 h-4 text-[#0a4ba6]" />
+              <span>Homepage Promo Banner Cards</span>
+            </h2>
+            <p className="text-[11px] text-slate-500 mt-0.5">
+              Customize the horizontal scrolling banner cards displayed right below the Hero section.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {(cms.promoBanners || []).map((card, idx) => (
+              <div key={idx} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                <p className="text-xs font-bold text-slate-900 uppercase">Banner Card #{idx + 1}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-600 uppercase mb-1">Title</label>
+                    <input
+                      type="text"
+                      value={card.title}
+                      onChange={(e) => {
+                        const updated = [...(cms.promoBanners || [])];
+                        updated[idx] = { ...updated[idx], title: e.target.value };
+                        setCms({ ...cms, promoBanners: updated });
+                      }}
+                      className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 focus:outline-hidden"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-600 uppercase mb-1">Subtitle</label>
+                    <input
+                      type="text"
+                      value={card.subtitle}
+                      onChange={(e) => {
+                        const updated = [...(cms.promoBanners || [])];
+                        updated[idx] = { ...updated[idx], subtitle: e.target.value };
+                        setCms({ ...cms, promoBanners: updated });
+                      }}
+                      className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 focus:outline-hidden"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-600 uppercase mb-1">Link URL (e.g. /plots)</label>
+                    <input
+                      type="text"
+                      value={card.href}
+                      onChange={(e) => {
+                        const updated = [...(cms.promoBanners || [])];
+                        updated[idx] = { ...updated[idx], href: e.target.value };
+                        setCms({ ...cms, promoBanners: updated });
+                      }}
+                      className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 focus:outline-hidden"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-600 uppercase mb-1">Background Image URL</label>
+                    <input
+                      type="text"
+                      value={card.image}
+                      onChange={(e) => {
+                        const updated = [...(cms.promoBanners || [])];
+                        updated[idx] = { ...updated[idx], image: e.target.value };
+                        setCms({ ...cms, promoBanners: updated });
+                      }}
+                      className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 focus:outline-hidden"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Social Handles */}
         <div className="space-y-4">
           <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">

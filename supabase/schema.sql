@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS public.properties (
     highlights JSONB DEFAULT '[]'::jsonb,
     amenities JSONB DEFAULT '[]'::jsonb,
     images JSONB DEFAULT '[]'::jsonb,
+    videos JSONB DEFAULT '[]'::jsonb,
     floor_plan_url TEXT,
     video_url TEXT,
     rera_approved BOOLEAN DEFAULT false,
@@ -137,6 +138,7 @@ CREATE TABLE IF NOT EXISTS public.cms_settings (
     hero_subheadline TEXT,
     about_story TEXT,
     banner_notice TEXT,
+    promo_banners JSONB DEFAULT '[]'::jsonb,
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -234,3 +236,9 @@ INSERT INTO public.cms_settings (
     'Premium residential open plots, luxury villas, and independent houses in prime, high-growth corridors across Ongole, Koppolu, and Andhra Pradesh.',
     'Founded by Bejapur Ayyappa Sai, Vrinda Real Estate was established with a clear mission: to bring absolute transparency, verified documentation, and genuine investment value to every homebuyer and land investor in Prakasam district and Andhra Pradesh.'
 ) ON CONFLICT (id) DO NOTHING;
+
+-- ==============================================================================
+-- MIGRATION HELPERS (Safely add columns if running against existing database)
+-- ==============================================================================
+ALTER TABLE public.properties ADD COLUMN IF NOT EXISTS videos JSONB DEFAULT '[]'::jsonb;
+ALTER TABLE public.cms_settings ADD COLUMN IF NOT EXISTS promo_banners JSONB DEFAULT '[]'::jsonb;

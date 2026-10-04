@@ -4,15 +4,13 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-interface PromoCard {
-  id: string;
-  title: string;
-  subtitle: string;
-  href: string;
-  image: string;
+import { PromoBannerItem } from '@/lib/types';
+
+interface PromoBannerCarouselProps {
+  banners?: PromoBannerItem[];
 }
 
-const PROMO_CARDS: PromoCard[] = [
+const DEFAULT_PROMO_CARDS: PromoBannerItem[] = [
   {
     id: 'plots-range',
     title: '₹4 Lakhs – ₹5 Crores Plots',
@@ -43,7 +41,9 @@ const PROMO_CARDS: PromoCard[] = [
   },
 ];
 
-export default function PromoBannerCarousel() {
+export default function PromoBannerCarousel({ banners }: PromoBannerCarouselProps) {
+  const activeBanners = Array.isArray(banners) && banners.length > 0 ? banners : DEFAULT_PROMO_CARDS;
+
   return (
     <section className="w-full py-4 sm:py-6 bg-white border-b border-slate-100 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -53,7 +53,7 @@ export default function PromoBannerCarousel() {
           className="flex items-center gap-3.5 sm:gap-5 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory py-1"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {PROMO_CARDS.map((card) => (
+          {activeBanners.map((card) => (
             <Link
               key={card.id}
               href={card.href}

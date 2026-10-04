@@ -115,6 +115,14 @@ export interface GalleryItem {
   createdAt: string;
 }
 
+export interface PromoBannerItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  href: string;
+  image: string;
+}
+
 export interface CMSSettings {
   businessName: string;
   founderName: string;
@@ -130,6 +138,7 @@ export interface CMSSettings {
   heroSubheadline: string;
   aboutStory: string;
   bannerNotice?: string;
+  promoBanners?: PromoBannerItem[];
 }
 
 export interface AdminUser {
