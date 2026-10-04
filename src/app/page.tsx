@@ -3,8 +3,8 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import Hero from '@/components/home/Hero';
 import PromoBannerCarousel from '@/components/home/PromoBannerCarousel';
-import NeoGlassWidgets from '@/components/home/NeoGlassWidgets';
 import CategoryCards from '@/components/home/CategoryCards';
+import QuickHighlights from '@/components/home/QuickHighlights';
 import FeaturedProperties from '@/components/home/FeaturedProperties';
 import WhyVrinda from '@/components/home/WhyVrinda';
 import LocationsSection from '@/components/home/LocationsSection';
@@ -33,9 +33,9 @@ export default async function HomePage() {
     <main className="min-h-screen flex flex-col bg-white">
       <Navbar />
       <Hero />
-      <NeoGlassWidgets />
       <PromoBannerCarousel banners={cms.promoBanners} />
       <CategoryCards />
+      <QuickHighlights />
       <FeaturedProperties properties={properties} />
       <WhyVrinda />
       <LocationsSection locations={locations} />
