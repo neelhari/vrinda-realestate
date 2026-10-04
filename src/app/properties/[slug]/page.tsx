@@ -101,8 +101,12 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
       {/* Property Details Container */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-6 sm:space-y-8 grow">
         
-        {/* 1. DIRECT IMMERSIVE E-COMMERCE PHOTO GALLERY */}
-        <PropertyGallery images={images} title={property.title} />
+        {/* 1. DIRECT IMMERSIVE E-COMMERCE PHOTO & VIDEO GALLERY */}
+        <PropertyGallery
+          images={images}
+          videos={property.videos || (property.videoUrl ? [property.videoUrl] : [])}
+          title={property.title}
+        />
 
         {/* 2. MODERN EDITORIAL HEADING & PROPERTY TYPE (No pill badges, no pricing box) */}
         <div className="space-y-2 pt-1 border-b border-slate-200 pb-5">

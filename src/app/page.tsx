@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import Hero from '@/components/home/Hero';
+import PromoBannerCarousel from '@/components/home/PromoBannerCarousel';
 import CategoryCards from '@/components/home/CategoryCards';
 import FeaturedProperties from '@/components/home/FeaturedProperties';
 import WhyVrinda from '@/components/home/WhyVrinda';
@@ -30,6 +31,7 @@ export default async function HomePage() {
     <main className="min-h-screen flex flex-col bg-white">
       <Navbar />
       <Hero />
+      <PromoBannerCarousel />
       <CategoryCards />
       <FeaturedProperties properties={properties} />
       <WhyVrinda />

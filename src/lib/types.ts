@@ -23,6 +23,7 @@ export interface Property {
   highlights: string[];
   amenities: string[];
   images: string[];
+  videos?: string[];
   floorPlanUrl?: string;
   videoUrl?: string;
   reraApproved?: boolean;

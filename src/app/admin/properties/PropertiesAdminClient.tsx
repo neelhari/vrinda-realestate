@@ -33,9 +33,11 @@ export default function PropertiesAdminClient({ initialProperties }: PropertiesA
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [isVideoUploading, setIsVideoUploading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const videoInputRef = useRef<HTMLInputElement | null>(null);
 
   // Form states
   const [title, setTitle] = useState('');
@@ -57,6 +59,8 @@ export default function PropertiesAdminClient({ initialProperties }: PropertiesA
   const [facing, setFacing] = useState('East Facing');
   const [description, setDescription] = useState('');
   const [images, setImages] = useState<string[]>(['/images/category-plots.jpg']);
+  const [videos, setVideos] = useState<string[]>([]);
+  const [videoUrlInput, setVideoUrlInput] = useState('');
   const [dtcpApproved, setDtcpApproved] = useState(true);
   const [possessionDate, setPossessionDate] = useState('Immediate Registration');
 
@@ -78,6 +82,8 @@ export default function PropertiesAdminClient({ initialProperties }: PropertiesA
     setFacing('East Facing');
     setDescription('Meticulously planned gated residential plotted layout with 40-foot wide BT roads, underground drainage, avenue plantation, and instant Sub-Registrar registration with clear titles in Koppolu.');
     setImages(['/images/category-plots.jpg']);
+    setVideos([]);
+    setVideoUrlInput('');
     setDtcpApproved(true);
     setPossessionDate('Immediate Registration');
     setIsModalOpen(true);
@@ -105,6 +111,8 @@ export default function PropertiesAdminClient({ initialProperties }: PropertiesA
     setFacing(prop.facing || '');
     setDescription(prop.description || '');
     setImages(prop.images && prop.images.length > 0 ? prop.images : ['/images/category-plots.jpg']);
+    setVideos(prop.videos && prop.videos.length > 0 ? prop.videos : (prop.videoUrl ? [prop.videoUrl] : []));
+    setVideoUrlInput('');
     setDtcpApproved(Boolean(prop.dtcpApproved));
     setPossessionDate(prop.possessionDate || 'Immediate');
     setIsModalOpen(true);
@@ -155,6 +163,57 @@ export default function PropertiesAdminClient({ initialProperties }: PropertiesA
     }
   };
 
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setIsVideoUploading(true);
+    try {
+      const uploadedUrls: string[] = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const formData = new FormData();
+        formData.append('file', files[i]);
+        formData.append('folder', 'vrinda_videos');
+
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.url) {
+            uploadedUrls.push(data.url);
+          }
+        } else {
+          const data = await res.json().catch(() => ({}));
+          alert(data.error || 'Video upload failed. Cloudinary max file size may apply.');
+        }
+      }
+
+      if (uploadedUrls.length > 0) {
+        setVideos((prev) => [...prev, ...uploadedUrls]);
+      }
+    } catch (err: any) {
+      console.error(err);
+      alert(err.message || 'Error uploading video');
+    } finally {
+      setIsVideoUploading(false);
+      if (videoInputRef.current) videoInputRef.current.value = '';
+    }
+  };
+
+  const handleAddVideoLink = () => {
+    if (!videoUrlInput.trim()) return;
+    setVideos((prev) => [...prev, videoUrlInput.trim()]);
+    setVideoUrlInput('');
+  };
+
+  const handleRemoveVideo = (indexToRemove: number) => {
+    setVideos((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
   const handleSetCoverImage = (indexToCover: number) => {
     if (indexToCover === 0) return;
     setImages((prev) => {
@@ -196,6 +255,8 @@ export default function PropertiesAdminClient({ initialProperties }: PropertiesA
       facing,
       description,
       images: images.length > 0 ? images : ['/images/category-plots.jpg'],
+      videos: videos.filter(Boolean),
+      videoUrl: videos[0] || '',
       dtcpApproved,
       reraApproved: dtcpApproved,
       possessionDate
@@ -817,6 +878,108 @@ export default function PropertiesAdminClient({ initialProperties }: PropertiesA
                     <span className="text-[11px] font-semibold">Upload Photo</span>
                   </div>
                 </div>
+              </div>
+
+              {/* 6B. Media: Property Videos & Drone Tours */}
+              <div className="space-y-3 p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <Video className="w-4 h-4 text-red-600" />
+                      <p className="text-xs font-bold text-slate-900 uppercase">Property Videos & Drone Tours</p>
+                    </div>
+                    <p className="text-[11px] text-slate-500 mt-0.5">
+                      Upload MP4 videos or paste YouTube / direct video links. These will appear directly in the property slider.
+                    </p>
+                  </div>
+
+                  {/* Upload Video Button */}
+                  <button
+                    type="button"
+                    disabled={isVideoUploading}
+                    onClick={() => videoInputRef.current?.click()}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer disabled:opacity-50"
+                  >
+                    {isVideoUploading ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>Uploading Video...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-3.5 h-3.5" />
+                        <span>+ Upload Video (MP4)</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {/* Hidden Video File Input */}
+                <input
+                  type="file"
+                  ref={videoInputRef}
+                  onChange={handleVideoUpload}
+                  accept="video/*"
+                  multiple
+                  className="hidden"
+                />
+
+                {/* Link input */}
+                <div className="flex items-center gap-2 pt-1">
+                  <input
+                    type="url"
+                    value={videoUrlInput}
+                    onChange={(e) => setVideoUrlInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleAddVideoLink();
+                      }
+                    }}
+                    placeholder="Or paste YouTube / Video link (e.g. https://youtu.be/...)"
+                    className="grow px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 focus:outline-hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddVideoLink}
+                    disabled={!videoUrlInput.trim()}
+                    className="px-3.5 py-2 bg-slate-800 hover:bg-black text-white text-xs font-bold rounded-xl disabled:opacity-40 transition-colors cursor-pointer"
+                  >
+                    Add Link
+                  </button>
+                </div>
+
+                {/* Videos List */}
+                {videos.length > 0 && (
+                  <div className="space-y-2 pt-2">
+                    <p className="text-[11px] font-bold text-slate-600 uppercase">Attached Videos ({videos.length})</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {videos.map((vidUrl, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-center justify-between gap-2 p-2.5 rounded-xl bg-white border border-slate-200 text-xs"
+                        >
+                          <div className="flex items-center gap-2 truncate">
+                            <span className="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0 text-[10px] font-bold">
+                              {idx + 1}
+                            </span>
+                            <span className="text-slate-700 font-medium truncate" title={vidUrl}>
+                              {vidUrl}
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveVideo(idx)}
+                            className="p-1 rounded-md text-red-500 hover:bg-red-50 hover:text-red-700 transition-colors shrink-0"
+                            title="Remove video"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* 7. Spacious Short Description */}
