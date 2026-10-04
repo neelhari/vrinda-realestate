@@ -100,7 +100,7 @@ export default function RootLayout({
       },
       {
         "@type": "Person",
-        name: "Murari Chiranjeevi",
+        name: "Murari Thirumula Babu",
         jobTitle: "Co-Founder & Operations Director"
       }
     ],

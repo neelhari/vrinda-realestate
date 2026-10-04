@@ -9,7 +9,7 @@ import { buildWhatsAppUrl, buildPhoneUrl } from '@/lib/utils';
 
 export const metadata: Metadata = {
   title: 'About Us & Founders | Vrinda Real Estate Ongole',
-  description: 'Learn about Vrinda Real Estate, our founders Bejapur Ayyappa Sai & Murari Chiranjeevi, and our commitment to transparent land developments in Ongole.',
+  description: 'Learn about Vrinda Real Estate, our founders Bejapur Ayyappa Sai & Murari Thirumula Babu, and our commitment to transparent land developments in Ongole.',
 };
 
 export default function AboutPage() {
@@ -161,13 +161,13 @@ export default function AboutPage() {
               </div>
             </div>
 
-            {/* Founder 2: Murari Chiranjeevi */}
+            {/* Founder 2: Murari Thirumula Babu */}
             <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row items-stretch">
               {/* Open Edge-to-Edge Single Picture Touching the Card */}
               <div className="relative w-full md:w-[42%] lg:w-[40%] min-h-[340px] sm:min-h-[400px] md:min-h-[380px] shrink-0 bg-slate-100">
                 <Image
                   src="/images/founder-murari-chiranjeevi.png"
-                  alt="Murari Chiranjeevi - Founder & Operations Director"
+                  alt="Murari Thirumula Babu - Founder & Operations Director"
                   fill
                   sizes="(max-width: 768px) 100vw, 400px"
                   className="object-cover object-top"
@@ -182,7 +182,7 @@ export default function AboutPage() {
                     Founder 2
                   </span>
                   <h3 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900">
-                    Murari Chiranjeevi
+                    Murari Thirumula Babu
                   </h3>
                   <p className="text-xs sm:text-sm font-semibold text-[#0a4ba6]">
                     Founder & Operations Director
