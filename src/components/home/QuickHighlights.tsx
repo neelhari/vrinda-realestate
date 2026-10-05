@@ -13,16 +13,16 @@ export default function QuickHighlights() {
   );
 
   const HIGHLIGHT_CARDS = [
-    {
+                    {
       id: 'budget-plots',
-      metric: '₹4L – ₹5 Cr',
+      metric: '₹4L – ₹4 Cr',
       number: '01',
       label: 'Plots For Every Budget',
       highlight: 'Affordable to luxury plots',
       icon: <Tag className="w-4 h-4 text-amber-600" />,
       accentColor: 'text-amber-600',
       iconBg: 'bg-amber-50 border-amber-100',
-      href: null
+      href: '/properties?type=plot&minPrice=400000&maxPrice=40000000'
     },
     {
       id: 'free-car',

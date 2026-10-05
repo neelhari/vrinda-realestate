@@ -13,9 +13,9 @@ interface PromoBannerCarouselProps {
 const DEFAULT_PROMO_CARDS: PromoBannerItem[] = [
   {
     id: 'plots-range',
-    title: '₹4 Lakhs – ₹5 Crores Plots',
+    title: '₹4 Lakhs – ₹4 Crores Plots',
     subtitle: 'Affordable to Luxury • Ongole & Highway',
-    href: '/plots',
+    href: '/properties?type=plot&minPrice=400000&maxPrice=40000000',
     image: '/images/category-plots.jpg',
   },
   {
