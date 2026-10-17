@@ -8,7 +8,7 @@ import { buildWhatsAppUrl } from '@/lib/utils';
 
 export default function QuickHighlights() {
   const cabWhatsAppUrl = buildWhatsAppUrl(
-    '9959912500',
+    '8464882925',
     'Hello Vrinda Real Estate, I would like to book a Free Car Pickup & Drop for a site visit in Ongole. Please share available timings and arrange the cab.'
   );
 

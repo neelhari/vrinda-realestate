@@ -12,7 +12,7 @@ interface PropertyCardProps {
 
 export default function PropertyCard({ property }: PropertyCardProps) {
   const whatsappUrl = buildWhatsAppUrl(
-    '9959912500',
+    '8464882925',
     `Hello Vrinda Real Estate, I am interested in ${property.title} located at ${property.location}. Please share complete details.`
   );
 

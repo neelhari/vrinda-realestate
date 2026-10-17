@@ -21,13 +21,13 @@ export function formatINR(amount: number): string {
   }).format(amount);
 }
 
-export function buildWhatsAppUrl(phone: string = '9959912500', message: string): string {
+export function buildWhatsAppUrl(phone: string = '8464882925', message: string): string {
   const cleanPhone = phone.replace(/[^0-9]/g, '');
   const encodedMsg = encodeURIComponent(message);
   return `https://wa.me/91${cleanPhone.startsWith('91') ? cleanPhone.slice(2) : cleanPhone}?text=${encodedMsg}`;
 }
 
-export function buildPhoneUrl(phone: string = '8464882925'): string {
+export function buildPhoneUrl(phone: string = '9959912500'): string {
   const cleanPhone = phone.replace(/[^0-9+]/g, '');
   return `tel:${cleanPhone}`;
 }

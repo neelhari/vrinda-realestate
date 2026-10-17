@@ -8,7 +8,7 @@ import { buildWhatsAppUrl } from '@/lib/utils';
 
 export default function SiteVisitCTA() {
   const whatsappUrl = buildWhatsAppUrl(
-    '9959912500',
+    '8464882925',
     'Hello Vrinda Real Estate, I would like to schedule a property site visit in Ongole.'
   );
 

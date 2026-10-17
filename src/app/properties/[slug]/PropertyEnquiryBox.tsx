@@ -20,7 +20,7 @@ export default function PropertyEnquiryBox({ property }: PropertyEnquiryBoxProps
   const [errorMessage, setErrorMessage] = useState('');
 
   const whatsappUrl = buildWhatsAppUrl(
-    '9959912500',
+    '8464882925',
     `Hello Vrinda Real Estate, I am interested in ${property.title}. Please share complete details.`
   );
 

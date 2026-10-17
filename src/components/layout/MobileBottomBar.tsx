@@ -13,8 +13,8 @@ export default function MobileBottomBar() {
     return null;
   }
 
-  const whatsappUrl = buildWhatsAppUrl('9959912500', 'Hello Vrinda Real Estate, I am interested in exploring properties in Ongole.');
-  const phoneUrl = buildPhoneUrl('8464882925');
+  const whatsappUrl = buildWhatsAppUrl('8464882925', 'Hello Vrinda Real Estate, I am interested in exploring properties in Ongole.');
+  const phoneUrl = buildPhoneUrl('9959912500');
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg px-3 py-2.5">

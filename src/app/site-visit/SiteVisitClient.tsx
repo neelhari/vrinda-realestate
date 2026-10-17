@@ -73,7 +73,7 @@ export default function SiteVisitClient({ properties }: SiteVisitClientProps) {
   };
 
   const whatsappConfirmationUrl = buildWhatsAppUrl(
-    '9959912500',
+    '8464882925',
     `Hello Vrinda Real Estate, I (${name}) have requested a site visit for ${selectedProperty} on ${preferredDate} (${preferredTime}). Please confirm availability.`
   );
 

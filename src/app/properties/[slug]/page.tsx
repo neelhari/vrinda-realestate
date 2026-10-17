@@ -58,11 +58,11 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
   }
 
   const whatsappUrl = buildWhatsAppUrl(
-    '9959912500',
+    '8464882925',
     `Hello Vrinda Real Estate, I am interested in ${property.title} located at ${property.location}. Please share complete details, plot map, and pricing.`
   );
 
-  const phoneUrl = buildPhoneUrl('8464882925');
+  const phoneUrl = buildPhoneUrl('9959912500');
 
   const typeLabels = {
     plot: 'Residential Plot',
@@ -310,7 +310,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
                 className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-[#0a4ba6] transition-colors"
               >
                 <Phone className="w-3.5 h-3.5 text-[#0a4ba6]" />
-                <span>Or Call +91 8464882925</span>
+                <span>Or Call +91 99599 12500</span>
               </a>
             </div>
           </div>

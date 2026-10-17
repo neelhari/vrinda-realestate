@@ -88,8 +88,8 @@ export default function ConsultationPage() {
 
                 <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600">
                   <p className="font-bold text-slate-900">Direct Contact Hotline:</p>
-                  <a href={buildPhoneUrl('8464882925')} className="text-sm font-bold text-[#0a4ba6] hover:underline mt-1 block">
-                    +91 8464882925
+                  <a href={buildPhoneUrl('9959912500')} className="text-sm font-bold text-[#0a4ba6] hover:underline mt-1 block">
+                    +91 99599 12500
                   </a>
                 </div>
               </div>

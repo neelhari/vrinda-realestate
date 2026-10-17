@@ -13,7 +13,7 @@ interface HeroProps {
 }
 
 export default function Hero({ headline, subheadline }: HeroProps) {
-  const whatsappUrl = buildWhatsAppUrl('9959912500', 'Hello Vrinda Real Estate, I would like to enquire about available properties in Ongole.');
+  const whatsappUrl = buildWhatsAppUrl('8464882925', 'Hello Vrinda Real Estate, I would like to enquire about available properties in Ongole.');
 
   return (
     <section className="relative min-h-[85vh] lg:min-h-screen flex items-center justify-center pt-20 pb-12 overflow-hidden bg-slate-950">

@@ -44,7 +44,7 @@ export default function Footer() {
                 <YouTubeIcon className="w-4 h-4" />
               </a>
               <a
-                href={buildWhatsAppUrl('9959912500', 'Hello Vrinda Real Estate, I would like to connect regarding property in Ongole.')}
+                href={buildWhatsAppUrl('8464882925', 'Hello Vrinda Real Estate, I would like to connect regarding property in Ongole.')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-full bg-slate-800 hover:bg-[#25D366] flex items-center justify-center text-slate-300 hover:text-white transition-all duration-200"
@@ -126,19 +126,19 @@ export default function Footer() {
             </div>
             <div className="flex items-center gap-2.5 text-xs text-slate-300">
               <Phone className="w-4 h-4 text-[#0a4ba6] shrink-0" />
-              <a href={buildPhoneUrl('8464882925')} className="hover:text-white">
-                +91 8464882925
+              <a href={buildPhoneUrl('9959912500')} className="hover:text-white">
+                +91 99599 12500
               </a>
             </div>
             <div className="flex items-center gap-2.5 text-xs text-slate-300">
               <WhatsAppIcon className="w-4 h-4 text-[#25D366] shrink-0" />
               <a
-                href={buildWhatsAppUrl('9959912500', 'Hello Vrinda Real Estate, I want to inquire about properties.')}
+                href={buildWhatsAppUrl('8464882925', 'Hello Vrinda Real Estate, I want to inquire about properties.')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-white"
               >
-                +91 9959912500 (WhatsApp)
+                +91 8464882925 (WhatsApp)
               </a>
             </div>
             <div className="flex items-center gap-2.5 text-xs text-slate-300">

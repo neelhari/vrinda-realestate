@@ -60,7 +60,7 @@ export default function ContactClient() {
   };
 
   const whatsappUrl = buildWhatsAppUrl(
-    '9959912500',
+    '8464882925',
     `Hello Vrinda Real Estate, I (${name}) sent an inquiry from your contact page regarding ${interest}.`
   );
 
@@ -127,7 +127,7 @@ export default function ContactClient() {
               required
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="e.g. 8464882925"
+              placeholder="e.g. 99599 12500"
               className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-hidden focus:border-[#0a4ba6] focus:bg-white transition-all"
             />
           </div>

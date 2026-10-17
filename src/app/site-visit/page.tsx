@@ -84,7 +84,7 @@ export default function SiteVisitPage() {
 
                 <div className="p-4 rounded-2xl bg-[#0a4ba6]/5 border border-[#0a4ba6]/15 space-y-1.5">
                   <p className="text-xs font-bold text-[#0a4ba6]">Need Immediate Assistance?</p>
-                  <p className="text-xs text-slate-600">Directly contact founder Bejapur Ayyappa Sai at <a href="tel:8464882925" className="font-bold underline text-slate-900">+91 8464882925</a></p>
+                  <p className="text-xs text-slate-600">Directly contact founder Bejapur Ayyappa Sai at <a href="tel:9959912500" className="font-bold underline text-slate-900">+91 99599 12500</a></p>
                 </div>
               </div>
             </div>

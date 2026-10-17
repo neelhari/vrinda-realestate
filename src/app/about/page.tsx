@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
-  const whatsappUrl = buildWhatsAppUrl('9959912500', 'Hello Vrinda Real Estate, I would like to consult regarding properties in Ongole.');
-  const phoneUrl = buildPhoneUrl('8464882925');
+  const whatsappUrl = buildWhatsAppUrl('8464882925', 'Hello Vrinda Real Estate, I would like to consult regarding properties in Ongole.');
+  const phoneUrl = buildPhoneUrl('9959912500');
 
   const stations = [
     {
@@ -87,7 +87,7 @@ export default function AboutPage() {
               className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-slate-900 hover:bg-[#0a4ba6] text-white rounded-xl text-xs font-semibold shadow-2xs active:scale-95 transition-all"
             >
               <Phone className="w-3.5 h-3.5" />
-              <span>Call 8464882925</span>
+              <span>Call 99599 12500</span>
             </a>
           </div>
         </div>
@@ -278,9 +278,9 @@ export default function AboutPage() {
               42-106-243, FCI Rd, N. T. R Colony, Koppolu, Ongole, Andhra Pradesh 523286
             </p>
             <div className="pt-2 flex flex-wrap items-center justify-center gap-4 text-xs text-slate-600 font-medium">
-              <span>Primary Phone: <strong className="text-slate-900">+91 8464882925</strong></span>
+              <span>Primary Phone: <strong className="text-slate-900">+91 99599 12500</strong></span>
               <span>•</span>
-              <span>WhatsApp: <strong className="text-slate-900">+91 9959912500</strong></span>
+              <span>WhatsApp: <strong className="text-slate-900">+91 8464882925</strong></span>
             </div>
           </div>
         </div>

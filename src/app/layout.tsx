@@ -104,7 +104,7 @@ export default function RootLayout({
         jobTitle: "Co-Founder & Operations Director"
       }
     ],
-    telephone: "+91-8464882925",
+    telephone: "+91-9959912500",
     email: "vrindarealestates0@gmail.com",
     address: {
       "@type": "PostalAddress",

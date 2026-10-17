@@ -54,7 +54,7 @@ export default function PrivacyPolicyPage() {
           <div className="space-y-3">
             <h3 className="text-base font-bold text-slate-900">4. Contacting Us</h3>
             <p>
-              If you have any questions regarding your data or wish to be removed from our follow-up list, please email <a href="mailto:vrindarealestates0@gmail.com" className="text-[#0a4ba6] font-semibold underline">vrindarealestates0@gmail.com</a> or call +91 8464882925.
+              If you have any questions regarding your data or wish to be removed from our follow-up list, please email <a href="mailto:vrindarealestates0@gmail.com" className="text-[#0a4ba6] font-semibold underline">vrindarealestates0@gmail.com</a> or call +91 99599 12500.
             </p>
           </div>
         </div>

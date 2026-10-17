@@ -6,8 +6,8 @@ import { WhatsAppIcon } from '@/components/icons/SocialIcons';
 import { buildWhatsAppUrl, buildPhoneUrl } from '@/lib/utils';
 
 export default function FinalCTA() {
-  const whatsappUrl = buildWhatsAppUrl('9959912500', 'Hello Vrinda Real Estate, I would like to schedule a discussion about purchasing property in Ongole.');
-  const phoneUrl = buildPhoneUrl('8464882925');
+  const whatsappUrl = buildWhatsAppUrl('8464882925', 'Hello Vrinda Real Estate, I would like to schedule a discussion about purchasing property in Ongole.');
+  const phoneUrl = buildPhoneUrl('9959912500');
 
   return (
     <section className="py-20 lg:py-28 bg-[#0b1329] text-white relative overflow-hidden">
@@ -55,7 +55,7 @@ export default function FinalCTA() {
             className="inline-flex items-center gap-2 px-6 py-4 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-full text-xs sm:text-sm font-medium backdrop-blur-md transition-all"
           >
             <Phone className="w-4 h-4 text-[#ea511c]" />
-            <span>Call +91 8464882925</span>
+            <span>Call +91 99599 12500</span>
           </a>
         </div>
 

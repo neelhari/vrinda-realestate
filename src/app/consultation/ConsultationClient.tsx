@@ -62,7 +62,7 @@ export default function ConsultationClient() {
   };
 
   const whatsappUrl = buildWhatsAppUrl(
-    '9959912500',
+    '8464882925',
     `Hello Vrinda Real Estate, I (${name}) would like to book a 1-on-1 property consultation regarding ${interestArea}.`
   );
 

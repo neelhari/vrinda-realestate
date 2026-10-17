@@ -18,12 +18,12 @@ import { buildWhatsAppUrl, buildPhoneUrl } from '@/lib/utils';
 
 export const metadata: Metadata = {
   title: 'Contact Vrinda Real Estate | Ongole Office & Consultation',
-  description: 'Reach out to Vrinda Real Estate in Koppolu and Ongole. Call +91 8464882925 or WhatsApp +91 9959912500 for clear-title property advisory.',
+  description: 'Reach out to Vrinda Real Estate in Koppolu and Ongole. Call +91 99599 12500 or WhatsApp +91 8464882925 for clear-title property advisory.',
 };
 
 export default function ContactPage() {
-  const whatsappUrl = buildWhatsAppUrl('9959912500', 'Hello Vrinda Real Estate, I would like to get in touch regarding property in Ongole.');
-  const phoneUrl = buildPhoneUrl('8464882925');
+  const whatsappUrl = buildWhatsAppUrl('8464882925', 'Hello Vrinda Real Estate, I would like to get in touch regarding property in Ongole.');
+  const phoneUrl = buildPhoneUrl('9959912500');
 
   return (
     <main className="min-h-screen flex flex-col bg-white">
@@ -73,7 +73,7 @@ export default function ContactPage() {
                     <div>
                       <p className="text-xs font-bold text-slate-400 uppercase">Primary Phone</p>
                       <a href={phoneUrl} className="text-sm font-bold text-slate-900 hover:text-[#0a4ba6]">
-                        +91 8464882925
+                        +91 99599 12500
                       </a>
                     </div>
                   </div>
@@ -86,7 +86,7 @@ export default function ContactPage() {
                     <div>
                       <p className="text-xs font-bold text-slate-400 uppercase">WhatsApp Assistance</p>
                       <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-slate-900 hover:text-emerald-600">
-                        +91 9959912500
+                        +91 8464882925
                       </a>
                     </div>
                   </div>
